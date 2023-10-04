@@ -1,6 +1,6 @@
 layout: page
 title: "Welcome"
-permalink: /
+permalink: /index
 
 <ul>
   {% for post in site.posts %}
