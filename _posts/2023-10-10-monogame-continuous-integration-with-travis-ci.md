@@ -1,7 +1,9 @@
+---
 layout: post
 title: "MonoGame – Continuous Integration with Travis CI"
 permalink: /general/monogame-continuous-integration-with-travis-ci
 tag: monogame ci
+---
 
 # MonoGame – Continuous Integration with Travis CI.
 
