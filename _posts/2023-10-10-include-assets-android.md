@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title: "Include Assets in .net Android"
 permalink: /general/include-assets-android
 tag: .net android dotnet
