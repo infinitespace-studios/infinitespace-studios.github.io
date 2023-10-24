@@ -10,3 +10,5 @@ title: Infinitespace Studios
 description: Mobile and Game Development
 exclude:
   README.md
+include:
+  images/*
