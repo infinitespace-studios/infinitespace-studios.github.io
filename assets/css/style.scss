@@ -1,9 +1,8 @@
 ---
 ---
 
-html {
-    height: 100%;
-  }
+@import "{{ site.theme }}";
+
   
   body {
     min-height: 100%;
