@@ -3,6 +3,7 @@ layout: default
 title: "Include Assets in .net Android"
 permalink: /general/include-assets-android
 tag: .net android dotnet
+summary: Learn how to include Android Assets from folders outside of your Project folder.
 ---
 
 # Include Assets in .net Android
