@@ -4,7 +4,7 @@ title: "About"
 permalink: /about
 ---
 
-<a class="noclick"><img src="https://avatars.githubusercontent.com/dellis1972" /></a>
+<a class="noclick"><img alt="Profile Picture" style="width:200px;" src="https://avatars.githubusercontent.com/dellis1972" /></a>
 <h3>Dean Ellis</h3>
 <a href="https://github.com/dellis1972">GitHub Profile</a>
 
