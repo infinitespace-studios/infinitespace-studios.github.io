@@ -2,7 +2,7 @@
 layout: default
 title: "Goodbye MonoGame"
 date: "2014-01-03"
-permalink: "gamedevelopment/goodbye-monogame/"
+permalink: /gamedevelopment/goodbye-monogame
 categories: 
   - "gamedevelopment"
   - "monogame"
