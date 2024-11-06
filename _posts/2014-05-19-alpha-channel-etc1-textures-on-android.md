@@ -61,12 +61,11 @@ etc1tool  _infile_ -encode -o _outfile_
 you can then include the resulting _outfile_ in your Assets folder and set its build action to 'AndroidAsset' then use the following code to load the texture
 
 ```csharp
- static int LoadTextureFromAssets (Activity activity, string filename)
+static int LoadTextureFromAssets (Activity activity, string filename)
 {
 
   using (var s = activity.Assets.Open (filename)) {
-    using (var t = Android.Opengl.ETC1Util.CreateTexture (s)) {
-
+    using (var t = Android.Opengl.ETC1Util.CreateTexture (s)) {
       int tid = GL.GenTexture ();
       GL.ActiveTexture (All.Texture0);
       GL.BindTexture (All.Texture2D, tid);
@@ -76,19 +75,17 @@ you can then include the resulting _outfile_ in your Assets folder and set its b
       GL.TexParameter (All.Texture2D, All.TextureWrapS, (int)All.ClampToEdge);
       GL.TexParameter (All.Texture2D, All.TextureWrapT, (int)All.ClampToEdge);
       Android.Opengl.ETC1Util.LoadTexture ((int)All.Texture2D, 0, 0, (int)All.Rgb, (int)All.UnsignedShort565, t);
-
       return tid;
     }
   }
 }
-
 ```
 
 Note you'll need to add using clauses for the various OpenTK namespaces used in the code.
 
 Now there is a problem with this technique, because of the way ETC1 works you will more than likely get some compression artefacts on the resulting image. In this my case I ended up with a purple/pink line around the image I was rendering. So perhaps that colour isn't the best choice in this case.
 
-![Screenshot_2014-05-19-09-55-01](images/Screenshot_2014-05-19-09-55-01-180x300.png)
+![Screenshot_2014-05-19-09-55-01](_posts/images/Screenshot_2014-05-19-09-55-01-180x300.png)
 
 So I tried again this time with a black colour key. This might help reduce the compression artifacts around the edges of the image. But I had to make some changes to the shader to make it a bit more generic and to handle a black colour key. The resulting shader turned out to be as follows.
 
