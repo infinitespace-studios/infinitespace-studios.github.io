@@ -1,6 +1,8 @@
 ---
+layout: default
 title: "Debugging with Large Assets in Xamarin Android"
 date: "2014-04-02"
+permalink: /general/debugging-with-large-assets-in-xamarin-android
 categories: 
   - "android"
   - "csharp"
@@ -20,7 +22,7 @@ What you can do is write an Extension method for the Android.Content.Res.AssetMa
 
 So I put together this.
 
-```
+```csharp
 public static class AssetMgrExt {
 
 	static Java.Util.Zip.ZipFile zip = null;
