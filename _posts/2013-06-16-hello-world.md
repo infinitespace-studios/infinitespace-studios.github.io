@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "I am back!"
-permalink: /general/hello-world
+permalink: /uncategorized/hello-world
 date: "2013-06-16"
 ---
 
