@@ -1,6 +1,8 @@
 ---
+layout: default
 title: "Alpha Channel ETC1 Textures on Xamarin.Android"
 date: "2014-05-19"
+permalink: /gamedevelopment/alpha-channel-etc1-textures-on-android
 categories: 
   - "android"
   - "csharp"
@@ -19,15 +21,17 @@ There are a number of different methods that I've found on the net mostly have t
 
 I'm talking about using a ColorKey, this is where you define a single colour in your image as the transparent colour, its used allot in movies these days for green screen work. We used to use this technique allot back in the day when video hardware didn't event know what an alpha channel was, so you just skip over the bits of the image that match the colour key and hey presto , you get a transparent image :).
 
-So lets take a look at this image.  [](http://www.infinitespace-studios.co.uk/wp-content/uploads/2014/05/f_spot_rgb.png)[![f_spot](images/f_spot-150x150.png)](http://www.infinitespace-studios.co.uk/wp-content/uploads/2014/05/f_spot.png)
+So lets take a look at this image. 
+
+![f_spot](images/f_spot-150x150.png)
 
 it has a nice alpha channel. But if we replace the alpha with a constant colour like so
 
-[![f_spot_rgb](images/f_spot_rgb-150x150.png)](http://www.infinitespace-studios.co.uk/wp-content/uploads/2014/05/f_spot.png)
+![f_spot_rgb](images/f_spot_rgb-150x150.png)
 
 we can then re-write our fragment shader to just detect this colour and set the alpha channel explicitly without having to mess about with other bitmaps, or changing texture coordinates. So our fragment shader simply becomes
 
-```
+```glsl
 uniform lowp sampler2D u_Texture;
 varying mediump vec2 v_TexCoordinate;
 
@@ -50,11 +54,13 @@ In this case I hardcoded the colour I'm using for the ColorKey but this could ea
 
 With this in place we can now use ETC1 textures across all android devices and get a alpha channel. While its not a full alpha channel (with semi transparency) it will probably be enough for most games. You can generate your compressed textures using the 'etc1util' tool provided with the android sdk. Its located in the tools folder of the sdk and you can just call
 
-  `etc1tool  _infile_ -encode -o _outfile_`
+```bash
+etc1tool  _infile_ -encode -o _outfile_
+```
 
 you can then include the resulting _outfile_ in your Assets folder and set its build action to 'AndroidAsset' then use the following code to load the texture
 
-```
+```csharp
  static int LoadTextureFromAssets (Activity activity, string filename)
 {
 
@@ -82,11 +88,11 @@ Note you'll need to add using clauses for the various OpenTK namespaces used in 
 
 Now there is a problem with this technique, because of the way ETC1 works you will more than likely get some compression artefacts on the resulting image. In this my case I ended up with a purple/pink line around the image I was rendering. So perhaps that colour isn't the best choice in this case.
 
-[![Screenshot_2014-05-19-09-55-01](images/Screenshot_2014-05-19-09-55-01-180x300.png)](http://www.infinitespace-studios.co.uk/wp-content/uploads/2014/06/Screenshot_2014-05-19-09-55-01.png)
+![Screenshot_2014-05-19-09-55-01](images/Screenshot_2014-05-19-09-55-01-180x300.png)
 
 So I tried again this time with a black colour key. This might help reduce the compression artifacts around the edges of the image. But I had to make some changes to the shader to make it a bit more generic and to handle a black colour key. The resulting shader turned out to be as follows.
 
-```
+```glsl
 uniform lowp sampler2D u_Texture;
 varying mediump vec2 v_TexCoordinate;
 
@@ -106,7 +112,7 @@ void main()
 
 You can see we are just using a rgb cutoff value to detect the black in the image and turn that into a transparency. Note that I'm using the red channel to set the transparent colour rather than just using 0.0, hopefully this will help with the blending. This produced the following result.
 
-[![Screenshot_2014-05-19-09-56-31](images/Screenshot_2014-05-19-09-56-31-180x300.png)](http://www.infinitespace-studios.co.uk/wp-content/uploads/2014/06/Screenshot_2014-05-19-09-56-31.png)
+![Screenshot_2014-05-19-09-56-31](images/Screenshot_2014-05-19-09-56-31-180x300.png)
 
 There is a slight black edge around the image, but it is probably be something you can get away with. The only issue with this is you can't use black in your image :( or if you do it has to be above the colour cutoff in the shader, that will require some testing to see what values you can get away with.
 
