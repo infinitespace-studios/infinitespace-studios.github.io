@@ -1,4 +1,6 @@
 ---
+layout: default
+permalink: /general/handling-multiple-screen-resolutions-in-monogame-for-android-part-1
 title: "Handling multiple screen resolutions in MonoGame for Android – Part 1"
 date: "2014-05-22"
 categories: 
@@ -32,7 +34,7 @@ The plan is to add the following functionality to the ScreenManager
 
 We need to define a few private fields to store the virtual width/height and a reference to the GraphicsDeviceManager.
 
-```
+```csharp
 private int virtualWidth;
 private int virtualHeight;
 private GraphicsDeviceManager graphicsDeviceManager;
@@ -43,7 +45,7 @@ private Matrix scaleMatrix = Matrix.Identity;
 
 Next we add the new properties to the ScreenManager, we should probably have local fields for the these as it will save having to allocate a new Vector2/Viewport/Matrix each time the property is accessed. But for now this will work, we can optimize it later.
 
-```
+```csharp
 public Viewport Viewport {
   get{ return new Viewport(0, 0, virtualWidth, virtualHeight);}
 }
@@ -61,7 +63,7 @@ public Vector2 InputTranslate {
 
 The constructor needs to be modified to include the virtual Width/Height paramerters and to resolve the GraphicsDeviceManager from the game.
 
-```
+```csharp
 public ScreenManager(Game game, int virtualWidth, int virtualHeight):base(game)
 {
   // set the Virtual environment up
@@ -77,7 +79,7 @@ public ScreenManager(Game game, int virtualWidth, int virtualHeight):base(game)
 
 Next is the code to create the Scale matrix. Update the Scale property to look like this. We use the updteMatrix flag to control when to re-generate the scaleMatrix so we don’t have to keep updating it every frame.
 
-```
+```csharp
 private Matrix scaleMatrix = Matrix.Identity;
 public Matrix Scale { 
   get {
@@ -93,7 +95,7 @@ public Matrix Scale {
 
 Now implement the CreateScale method, this method will return a Matrix which we wil use to tell the SpriteBatch how to scale the graphics when they finally get drawn.
 
-```
+```csharp
 protected void CreateScaleMatrix() {
   scaleMatrix = Matrix.CreateScale((float)GraphicsDevice.Viewport.Width/ virtualWidth, (float)GraphicsDevice.Viewport.Width/ virtualWidth, 1f);
 }
@@ -104,7 +106,7 @@ So what we have done so far is coded up all the properties we need to make this 
 
 First thing to do is to update the Draw method of the ScreenManager to call a new method BeginDraw. This method will setup the Viewports and Clear the backbuffer.
 
-```
+```csharp
 public override void Draw(GameTime gameTime) {
   BeginDraw();
   foreach(GameScreen screen in screens)
@@ -119,7 +121,7 @@ public override void Draw(GameTime gameTime) {
 
 The BeginDraw method calls a bunch of other methods to setup the Viewports. Here is the code
 
-```
+```csharp
 protected void FullViewport ()
 { 
 	Viewport vp = new Viewport (); 
@@ -179,28 +181,28 @@ protected void BeginDraw ()
 
 So first thing we do is reset the Full viewport to the size of the PrefferedBackBufferWidth/Height and then Clear it. Then we reset the viewport to take into account the aspect ratio of the virtual viewport and calculate the virtical/horizontal offsets to center the new viewport and then Clear that just to be sure.That is all the code changes for the ScreenManager. To use it all we need to do is add the extra parameters when we create the new ScreenManager like so
 
-```
+```csharp
 screenManager=new ScreenManager (this, 800, 480);
 
 ```
 
 You will need to pass in the resolution your game was designed for, in this case 800×480. Then in all the places where we call SpriteBatch.Begin() we need to pass in the screenManager.Scale matrix like so
 
-```
+```csharp
 spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, ScreenManager.Scale);
 
 ```
 
 Note that the SpriteBatch has a number of overloaded Begin methods, you will need to adapt your code if you use things like SamplesState, BlendState, etc. Each of the Game screens should already have a reference to the ScreenManager if you follow the sample code from Microsoft. Also if you make use of GraphicsDevice.Viewport in your game to place objects based on screen size (like ui elements) that will need to be changed to use the ScreenManager.Viewport instead so they are placed within the virtual Viewport. So in the MenuScreen the following call would change from
 
-```
+```csharp
 position.X= GraphicsDevice.Viewport.Width/2- menuEntry.GetWidth(this)/2; 
 
 ```
 
 to this
 
-```
+```csharp
 position.X= ScreenManager.Viewport.Width/2- menuEntry.GetWidth(this)/2;
 
 ```
