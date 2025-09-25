@@ -10,6 +10,7 @@ categories:
 tags: 
   - "gamedev"
   - "monogame"
+summary: "The MonoGame Pipeline Tool is now available for macOS and Linux, providing cross-platform content compilation without requiring XNA installation."
 ---
 
 Its finally done, the Pipeline tool is now working on OSX (and Linux). Over the christmas break I worked with another MonoGame contributor (@cra0zy) to finish off the Tool and build the Mac OS Installer.

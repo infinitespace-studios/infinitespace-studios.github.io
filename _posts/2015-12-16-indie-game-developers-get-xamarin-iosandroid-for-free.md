@@ -13,6 +13,7 @@ tags:
   - "xamarin"
   - "xna"
 permalink: /general/indie-game-developers-get-xamarin-iosandroid-for-free/
+summary: "Xamarin announces free iOS and Android subscriptions for indie game developers in December 2015."
 ---
 
 Xamarin [announced](https://blog.xamarin.com/indie-game-developers-get-xamarin-for-free/) something awesome yesterday.

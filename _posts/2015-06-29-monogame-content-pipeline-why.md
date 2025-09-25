@@ -12,6 +12,7 @@ tags:
   - "gamedev"
   - "monogame"
 permalink: /general/monogame-content-pipeline-why/
+summary: "Explains why MonoGame's Content Pipeline is essential for optimizing game assets like textures, audio, shaders, and models for better performance and efficiency."
 ---
 
 The MonoGame team have been putting allot of effort into a cross platform content pipeline, but given that for the most part we support loading native assets like .png, .mp3, .wav why bother? Well it all boils down to a couple of words.. performance, efficiency. Lets look at an example, graphics are probably the biggest asset a game uses, they are also a major resource hog. Textures will probably take up most of the room in your deployment and will be taking up most of the memory on your device as well.

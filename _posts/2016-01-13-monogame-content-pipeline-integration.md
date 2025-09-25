@@ -14,6 +14,7 @@ tags:
   - "monogame"
   - "msbuild"
 permalink: /general/monogame-content-pipeline-integration/
+summary: "How MonoGame's automatic content building system works through MSBuild integration across Windows, Mac, and Linux platforms"
 ---
 
 In the past it might seem that Windows users of MonoGame get all the cool stuff, and Mac / Linux users are left out in the cold. To be honest for a while that was true, but the great news is that more recently that has begun to change. On going community efforts have resulted in both MacOS and Linux installers which will download and install templates into the Xamarin Studio and MonoDevelop. They also install the Pipeline tool which is a GUI you can use to build your content for your game.
