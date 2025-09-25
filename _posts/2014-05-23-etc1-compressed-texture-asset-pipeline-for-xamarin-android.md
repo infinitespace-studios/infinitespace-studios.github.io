@@ -3,6 +3,7 @@ layout: default
 title: "ETC1 Compressed Texture Asset Pipeline for Xamarin.Android"
 date: "2014-05-23"
 permalink: /general/etc1-compressed-texture-asset-pipeline-for-xamarin-android/
+summary: Creating a custom MSBuild task to automatically convert PNG textures to ETC1 compressed format with alpha channel separation during Xamarin.Android builds.
 categories: 
   - "android"
   - "csharp"

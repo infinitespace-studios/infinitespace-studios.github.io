@@ -3,6 +3,7 @@ layout: default
 title: "I am back!"
 permalink: /uncategorized/hello-world
 date: "2013-06-16"
+summary: Hackers are ....
 ---
 
 Thanks to a nice guy who decided to totally screw up my blog I have had to wipe and reinstall everything. I will be trying to re-post some of the content that was lost during this episode but I'm afraid some of it is lost forever.

@@ -9,6 +9,7 @@ categories:
 tags: 
   - "gamedev"
   - "monogame"
+summary: Life sometimes kicks you where it hurts.
 ---
 
 Its been a while since my last blog post, allot have happened since then. Firstly for all of your looking for the [MonoGame](http://monogame.net) tutorials, I'm afraid they are gone :(. The backup database I had was corrupt and the hacker completely ruined the live db. So I'm sorry for those of you coming here looking for those articles.

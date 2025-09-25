@@ -3,6 +3,7 @@ layout: default
 title: "Debugging with Large Assets in Xamarin Android"
 date: "2014-04-02"
 permalink: /general/debugging-with-large-assets-in-xamarin-android
+summary: Outline work arounds for debugging very large assets.
 categories: 
   - "android"
   - "csharp"

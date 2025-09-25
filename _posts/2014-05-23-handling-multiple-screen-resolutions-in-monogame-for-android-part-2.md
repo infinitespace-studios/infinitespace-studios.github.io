@@ -16,6 +16,7 @@ tags:
   - "monogame"
   - "xamarin"
 permalink: /general/handling-multiple-screen-resolutions-in-monogame-for-android-part-2/
+summary: "Part 2 of scaling input (mouse and touch gestures) to work with virtual resolutions in MonoGame for Android"
 ---
 
 In my previous [post](http://infinitespace-studios.co.uk/general/handling-multiple-screen-resolutions-in-monogame-for-android-part-1) we looked at how to modify the [ScreenManager](http://create.msdn.com/en-US/education/catalog/sample/game_state_management) class to support multiple resolutions. This works fine but what we also need is a way to scale the inputs from the Mouse or TouchScreen so that they operate at the same virtual resolution as the game does.
