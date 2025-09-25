@@ -10,6 +10,7 @@ tags:
   - "gamedev"
   - "monogame"
 permalink: /general/monogame-content-pipeline-xna-required/
+summary: "MonoGame now has its own content pipeline tooling, eliminating the need to install XNA 4.0 SDK for content processing."
 ---
 
 Some of you might have heard that [MonoGame](http://monogame.net) now has its own content pipeline tooling, and it works! As a result the need to install the XNA 4.0 SDK is no longer required, unless you want to target Xbox 360 of course.  For those of you looking for documentation on the new tooling you can head over to [here](http://www.monogame.net/documentation/?page=Pipeline) for information on the Pipeline GUI and [here](http://www.monogame.net/documentation/?page=MGCB) for information on the MGCB tool. But I'll give you a basic overview on how this all hangs together.

@@ -13,6 +13,7 @@ tags:
   - "monogame"
   - "xamarin"
 permalink: /general/getting-started-on-argumented-reality-using-xamarin-android-and-monogame/
+summary: "Learn how to create augmented reality applications by overlaying MonoGame graphics on top of camera views using Xamarin.Android."
 ---
 
 Xamarin recently published a interview with George Banfill from [LinkNode](http://linknode.co.uk) on their Augmented Reality product, you can see the full interview [here](http://blog.xamarin.com/app-spotlight-ventusars-augmented-reality-wind-turbines-with-monogame-video/). Since then I've had a number of requests from people wanting to know how to do this using MonoGame and Xamarin.Android. Believe it or not its simpler than you think to get started.

@@ -14,6 +14,7 @@ tags:
   - "gamedev"
   - "xamarin"
 permalink: /general/oh-android-you-are-a-fickle-creature/
+summary: "Fixing Android activity destruction on screen lock by adding ScreenSize to ConfigurationChanges in Xamarin.Android" 
 ---
 
 So as you may have noticed I've been playing about allot with OpenGL and android recently and I started to see some very weird behaviour. The normal [activity life cycle](http://developer.xamarin.com/Guides/Android/Application_Fundamentals/Activity_Lifecycle/) states that when the lock screen is enabled, the activity will be Paused, then Stopped. This seemed to be the behaviour I saw in the devices I was testing on until I tried a Nexus 4.. On lock it would Pause, Stop then Destroy.. WFT! and it would only do this on the Nexus 4.
