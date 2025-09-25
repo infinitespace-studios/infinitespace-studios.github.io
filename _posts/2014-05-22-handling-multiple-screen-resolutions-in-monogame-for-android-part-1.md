@@ -125,57 +125,57 @@ The BeginDraw method calls a bunch of other methods to setup the Viewports. Here
 ```csharp
 protected void FullViewport ()
 { 
-	Viewport vp = new Viewport (); 
-	vp.X = vp.Y = 0; 
-	vp.Width = DeviceManager.PreferredBackBufferWidth;
-	vp.Height = DeviceManager.PreferredBackBufferHeight;
-	GraphicsDevice.Viewport = vp;   
+    Viewport vp = new Viewport (); 
+    vp.X = vp.Y = 0; 
+    vp.Width = DeviceManager.PreferredBackBufferWidth;
+    vp.Height = DeviceManager.PreferredBackBufferHeight;
+    GraphicsDevice.Viewport = vp;   
 }
 
 protected float GetVirtualAspectRatio ()
 {
-	return(float)virtualWidth / (float)virtualHeight;   
+    return(float)virtualWidth / (float)virtualHeight;   
 }
 
 protected void ResetViewport ()
 {
-	float targetAspectRatio = GetVirtualAspectRatio ();   
-	// figure out the largest area that fits in this resolution at the desired aspect ratio     
-	int width = DeviceManager.PreferredBackBufferWidth;   
-	int height = (int)(width / targetAspectRatio + .5f);   
-	bool changed = false;     
-	if (height > DeviceManager.PreferredBackBufferHeight) { 
-		height = DeviceManager.PreferredBackBufferHeight;   
-		// PillarBox 
-		width = (int)(height * targetAspectRatio + .5f);
-		changed = true;   
-	}     
-	// set up the new viewport centered in the backbuffer 
-	Viewport viewport = new Viewport ();   
-	viewport.X = (DeviceManager.PreferredBackBufferWidth / 2) - (width / 2); 
-	viewport.Y = (DeviceManager.PreferredBackBufferHeight / 2) - (height / 2); 
-	viewport.Width = width; 
-	viewport.Height = height; 
-	viewport.MinDepth = 0; 
-	viewport.MaxDepth = 1;     	
-	if (changed) {
-		updateMatrix = true;
-	}   
-	DeviceManager.GraphicsDevice.Viewport = viewport;   
+    float targetAspectRatio = GetVirtualAspectRatio ();   
+    // figure out the largest area that fits in this resolution at the desired aspect ratio     
+    int width = DeviceManager.PreferredBackBufferWidth;   
+    int height = (int)(width / targetAspectRatio + .5f);   
+    bool changed = false;     
+    if (height > DeviceManager.PreferredBackBufferHeight) { 
+        height = DeviceManager.PreferredBackBufferHeight;   
+        // PillarBox 
+        width = (int)(height * targetAspectRatio + .5f);
+        changed = true;   
+    }     
+    // set up the new viewport centered in the backbuffer 
+    Viewport viewport = new Viewport ();   
+    viewport.X = (DeviceManager.PreferredBackBufferWidth / 2) - (width / 2); 
+    viewport.Y = (DeviceManager.PreferredBackBufferHeight / 2) - (height / 2); 
+    viewport.Width = width; 
+    viewport.Height = height; 
+    viewport.MinDepth = 0; 
+    viewport.MaxDepth = 1;         
+    if (changed) {
+        updateMatrix = true;
+    }   
+    DeviceManager.GraphicsDevice.Viewport = viewport;   
 }
 
 protected void BeginDraw ()
 {   
-	// Start by reseting viewport 
-	FullViewport ();   
-	// Clear to Black 
-	GraphicsDevice.Clear (Color.Black);   
-	// Calculate Proper Viewport according to Aspect Ratio 
-	ResetViewport ();   
-	// and clear that    
-	// This way we are gonna have black bars if aspect ratio requires it and     
-	// the clear color on the rest 
-	GraphicsDevice.Clear (Color.Black);   
+    // Start by reseting viewport 
+    FullViewport ();   
+    // Clear to Black 
+    GraphicsDevice.Clear (Color.Black);   
+    // Calculate Proper Viewport according to Aspect Ratio 
+    ResetViewport ();   
+    // and clear that    
+    // This way we are gonna have black bars if aspect ratio requires it and     
+    // the clear color on the rest 
+    GraphicsDevice.Clear (Color.Black);   
 }
 
 ```
@@ -208,4 +208,4 @@ position.X= ScreenManager.Viewport.Width/2- menuEntry.GetWidth(this)/2;
 
 ```
 
-This should be all you need. In the next post we will look at the changes we need to make to the InputState.cs class to get the mouse and gesture inputs scaled as well.You can download a copy of the modified ScreenManager class [here](http://www.infinitespace-studios.co.uk/code/ScreenManager.cs).
+This should be all you need. In the next post we will look at the changes we need to make to the InputState.cs class to get the mouse and gesture inputs scaled as well.You can download a copy of the modified ScreenManager class [http://www.infinitespace-studios.co.uk/code/ScreenManager.cs](http://www.infinitespace-studios.co.uk/code/ScreenManager.cs).

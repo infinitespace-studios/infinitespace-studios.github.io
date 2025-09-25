@@ -26,44 +26,44 @@ So I put together this.
 ```csharp
 public static class AssetMgrExt {
 
-	static Java.Util.Zip.ZipFile zip = null;
+    static Java.Util.Zip.ZipFile zip = null;
 
-	public static void Initialize(string data) {
-		zip = new Java.Util.Zip.ZipFile (data);
-	}
+    public static void Initialize(string data) {
+        zip = new Java.Util.Zip.ZipFile (data);
+    }
 
-	public static void Close() {
-		zip.Close ();
-		zip = null;
-	}
+    public static void Close() {
+        zip.Close ();
+        zip = null;
+    }
 
-	public static System.IO.Stream OpenExt(this Android.Content.Res.AssetManager mgr, string filename) {
+    public static System.IO.Stream OpenExt(this Android.Content.Res.AssetManager mgr, string filename) {
 #if !DEBUG
-		return mgr.Open(filename);
+        return mgr.Open(filename);
 #else
-		if (zip != null) {
-			var entry = zip.GetEntry(filename);
-			if (entry == null)
-				throw new Exception(string.Format("Could not find {0} in external zip", filename));
-			try {
-			
-			using (var s = zip.GetInputStream(entry)) {
-				System.IO.MemoryStream ms = new System.IO.MemoryStream();
-				s.CopyTo(ms);
-				ms.Position = 0;
-				return ms;
-			}
-			}
-			finally {
-				entry.Dispose();
-			}
+        if (zip != null) {
+            var entry = zip.GetEntry(filename);
+            if (entry == null)
+                throw new Exception(string.Format("Could not find {0} in external zip", filename));
+            try {
+            
+            using (var s = zip.GetInputStream(entry)) {
+                System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                s.CopyTo(ms);
+                ms.Position = 0;
+                return ms;
+            }
+            }
+            finally {
+                entry.Dispose();
+            }
 
-		}
-		else  {
-			throw new InvalidOperationException("Call Initialize first!!");
-		}
+        }
+        else  {
+            throw new InvalidOperationException("Call Initialize first!!");
+        }
 #endif
-	}
+    }
 }
 
 ```
@@ -72,7 +72,7 @@ Add it to your project. Call AssetMgrExt.Initialize("/mnt/sdcard/Dowloads/blah.z
 
 What I tend to do now is never add assets to the project unless its a small project. Instead I use this extension or something similar during the debugging/development process. For release builds I take a release .apk and run a post build task on it to add the assets later, that way I don't have to mess about with different projects or msbuild conditionals. I can just build the .apk in release mode and add the assets later before signing using
 
-```
+```bash
 aapt add your.apk assets/someasset.foo
 ```
 

@@ -31,13 +31,13 @@ So lets look at some code.
 
 Creating a Render Target in MonoGame is really easy, we add the following code to the Initialise method of our game
 
-```
+```csharp
 scene = new RenderTarget2D(graphics.GraphicsDevice, 1366, 768, false, SurfaceFormat.Color, DepthFormat.None, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
 ```
 
 Next step is to actually use the Render Target. We do this in the Draw method
 
-```
+```csharp
 GraphicsDevice.SetRenderTarget(scene);
 // draw your game
 GraphicsDevice.SetRenderTarget (null);
@@ -45,7 +45,7 @@ GraphicsDevice.SetRenderTarget (null);
 
 As you can see we tell the GraphicsDevice to use our RenderTarget, we draw the game, then tell the GraphicsDevice to not use any RenderTarget. We can how just use a SpriteBatch as normal to draw the RenderTarget to the screen. The following code will just draw the RenderTarget in the top left of the screen without scaling
 
-```
+```csharp
 spriteBatch.Being();
 spriteBatch.Draw(scene, Vector2.Zero);
 spriteBtach.End();
@@ -55,14 +55,14 @@ However what we really need to do before we draw the RenderTarget is calculate a
 
 So first this we need to do is calculate the aspect ratio of the RenderTarget and the Screen
 
-```
+```csharp
 float outputAspect = Window.ClientBounds.Width / (float)Window.ClientBounds.Height;
 float preferredAspect = 1366 / (float)768;
 ```
 
 Next we need to decide if we calculate the destination rectangle, but we need to add a "letter boxing" effect. these are black bars at the top and bottom of the screen (or to the left and right) which fill in the missing area so that we maintain aspect ration. Its a bit like watching a Wide Screen movie on an old TV, you get the black bars at the top and bottom. The code to do this is as follows
 
-```
+```csharp
 Rectangle dst;
 if (outputAspect <= preferredAspect)
 {
@@ -84,7 +84,7 @@ You can see from the code we calculate how much to offset the rectangle from the
 
 So with the destination rectangle calculated we can now use the following to draw the RenderTarget
 
-```
+```csharp
 graphics.GraphicsDevice.Clear(ClearOptions.Target, Color.Black, 1.0f, 0);
 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
 spriteBatch.Draw(renderTarget, dst, Color.White);
@@ -97,14 +97,14 @@ Note we clear the background black before drawing to get the nice black borders.
 
 By using a fixed size render target we will need to do something about the Touch input. Its no good on a 320x200 screen getting a touch location of 320x200 and passing that into our game world which we think it 1366x760 as it won't be in the right place. Fortunately MonoGame has an excellent solution
 
-```
+```csharp
 TouchPanel.DisplayWidth = 1366;
 TouchPanel.DispalyHeight = 768;
 ```
 
 By setting the DisplayWidth/Height on the TouchPanel it will AUTOMATICALLY scale the input for you.. That is just awesome! But wait for it .. it gets even better. You can also easily turn the Mouse input into Touch input which is handy if you're  only interested in left click events.
 
-```
+```csharp
 TouchPanel.EnableMouseTouchPoint = true;
 ```
 

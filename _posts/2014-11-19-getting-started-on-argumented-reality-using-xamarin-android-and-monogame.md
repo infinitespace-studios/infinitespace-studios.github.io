@@ -20,52 +20,51 @@ Xamarin recently published a interview with George Banfill from [LinkNode](http:
 
 First thing you need is a class to handle the Camera. Google has done a nice job at giving you a very basic sample of a 'CameraVew' [here](http://developer.android.com/guide/topics/media/camera.html). For those of you not wishing to port that over to C# from Java (yuk) here is the code
 
-```
-
+```csharp
 public class CameraView : SurfaceView, ISurfaceHolderCallback {
         Camera camera;
 
         public CameraView (Context context, Camera camera) : base(context)
         {
                 this.camera = camera;
-		Holder.AddCallback(this);
-		// deprecated setting, but required on 
+        Holder.AddCallback(this);
+        // deprecated setting, but required on 
                 // Android versions prior to 3.0
-		Holder.SetType(SurfaceType.PushBuffers);
-	}
+        Holder.SetType(SurfaceType.PushBuffers);
+    }
 
-	public void SurfaceChanged (ISurfaceHolder holder, Android.Graphics.Format format, int width, int height)
-	{
-		if (Holder.Surface == null){
-			// preview surface does not exist
-			return;
-		}
+    public void SurfaceChanged (ISurfaceHolder holder, Android.Graphics.Format format, int width, int height)
+    {
+        if (Holder.Surface == null){
+            // preview surface does not exist
+            return;
+        }
 
-		try {
-			camera.StopPreview();
-		} catch (Exception e){
-		}
-		try {
-			camera.SetPreviewDisplay(Holder);
-			camera.StartPreview();
-		} catch (Exception e){
-			Android.Util.Log.Debug ("CameraView", e.ToString ());
-		}
-	}
+        try {
+            camera.StopPreview();
+        } catch (Exception e){
+        }
+        try {
+            camera.SetPreviewDisplay(Holder);
+            camera.StartPreview();
+        } catch (Exception e){
+            Android.Util.Log.Debug ("CameraView", e.ToString ());
+        }
+    }
 
-	public void SurfaceCreated (ISurfaceHolder holder)
-	{
-		try {
-			camera.SetPreviewDisplay(holder);
-			camera.StartPreview();
-		} catch (Exception e) {
-			Android.Util.Log.Debug ("CameraView", e.ToString ());
-		}
-	}
+    public void SurfaceCreated (ISurfaceHolder holder)
+    {
+        try {
+            camera.SetPreviewDisplay(holder);
+            camera.StartPreview();
+        } catch (Exception e) {
+            Android.Util.Log.Debug ("CameraView", e.ToString ());
+        }
+    }
 
-	public void SurfaceDestroyed (ISurfaceHolder holder)
-	{
-	}
+    public void SurfaceDestroyed (ISurfaceHolder holder)
+    {
+    }
 }
 ```
 
@@ -73,25 +72,24 @@ It might not be pretty but it does the job, also it doesn't handle a flipped vie
 
 The next step is to figure out how to show MonoGame's GameWindow and the Camera View at the same time. Again, that is quite easy we can use a FrameLayout like so.
 
-```
-
+```csharp
 protected override void OnCreate (Bundle bundle)
 {
-	base.OnCreate (bundle);
-	Game1.Activity = this;
-	var g = new Game1 ();
-	FrameLayout frameLayout = new FrameLayout(this);
-	frameLayout.AddView (g.Window);  
-	try {
-		camera = Camera.Open ();
-		cameraView = new CameraView (this, camera);
-		frameLayout.AddView (cameraView);
-	} catch (Exception e) {
-		// oops no camera
-		Android.Util.Log.Debug ("CameraView", e.ToString ());
-	}
-	SetContentView (frameLayout);
-	g.Run ();
+    base.OnCreate (bundle);
+    Game1.Activity = this;
+    var g = new Game1 ();
+    FrameLayout frameLayout = new FrameLayout(this);
+    frameLayout.AddView (g.Window);  
+    try {
+        camera = Camera.Open ();
+        cameraView = new CameraView (this, camera);
+        frameLayout.AddView (cameraView);
+    } catch (Exception e) {
+        // oops no camera
+        Android.Util.Log.Debug ("CameraView", e.ToString ());
+    }
+    SetContentView (frameLayout);
+    g.Run ();
 }
 ```
 
@@ -99,7 +97,7 @@ This is almost the same as the normal MonoGame android code you get, but instead
 
 Now this won't work out of the box because there are a couple of other small changes we need. First we need to set the SurfaceFormat of the game Window to Rgba8888, this is because it defaults to a format which does not contain an alpha channel. So if we leave it as is we will not see the camera view underneath the game windows since its opaque. We can change the surface format using
 
-```
+```csharp
 g.Window.SurfaceFormat = Android.Graphics.Format.Rgba8888;
 ```
 
@@ -107,7 +105,7 @@ We need to do that BEFORE we add that to the frameLayout though. Another thing t
 
 The next thing is we need to change our normal Clear colour in Game1 from the standard Color.CornflowerBlue to Color.Transparent
 
-```
+```csharp
 graphics.GraphicsDevice.Clear (Color.Transparent);
 ```
 

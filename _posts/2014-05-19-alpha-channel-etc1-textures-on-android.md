@@ -22,7 +22,7 @@ There are a number of different methods that I've found on the net mostly have t
 
 I'm talking about using a ColorKey, this is where you define a single colour in your image as the transparent colour, its used allot in movies these days for green screen work. We used to use this technique allot back in the day when video hardware didn't event know what an alpha channel was, so you just skip over the bits of the image that match the colour key and hey presto , you get a transparent image :).
 
-So lets take a look at this image. 
+So lets take a look at this image.
 
 ![f_spot](../images/f_spot-150x150.png)
 

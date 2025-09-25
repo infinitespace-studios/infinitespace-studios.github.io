@@ -43,7 +43,7 @@ The sounds effects we courtesy of my voice and [Audacity](http://audacity.source
 
 So the next week is the testing/review phase. I've sent the game out to a few friends to test and feedback, hopefully they will have time to play it otherwise I'll have to ditch it all and start again. After this week we have one more week of polish and implanting the feedback before I have to release the app, not entirely sure where to release it yet though. I might try porting it to OUYA in that last week and see how that works.
 
-Anyway for those of you wanting to test it out you can get the zip file of the release [here](http://www.infinitespace-studios.co.uk/wp-content/uploads/2014/01/InfiniteSpace.Dogfight.zip).
+Anyway for those of you wanting to test it out you can get the zip file of the release [http://www.infinitespace-studios.co.uk/wp-content/uploads/2014/01/InfiniteSpace.Dogfight.zip](http://www.infinitespace-studios.co.uk/wp-content/uploads/2014/01/InfiniteSpace.Dogfight.zip).
 
 Happy coding.
 

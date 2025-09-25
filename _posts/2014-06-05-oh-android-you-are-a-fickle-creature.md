@@ -21,9 +21,8 @@ So as you may have noticed I've been playing about allot with OpenGL and android
 
 This caused me a big problem because the app I was putting together was a game, so if the screen locked in the middle of a game it wouldn't just pickup from where it left it would restart the entire app and loose your progress... Not happy.. So I spent ages looking at my code to try to figure out what was going on and I stumbled across the following property when messing about in my OnDestroy method of the Activity.
 
-```
+```csharp
 this.ChangingConfigurations
-
 ```
 
 Hmm, what was that property about. Well it turns out this property tells you which configurations changed. When I looked at this when in my OnDestroy method I was it had a value of ScreenSize… Hmm A bit more research lead me to this from the android docs.
@@ -32,19 +31,18 @@ Hmm, what was that property about. Well it turns out this property tells you whi
 
 So now it all makes sense.. When the nexus 4 (Andoid 4.3) was screen locking it was changing the Orientation to Portrait (helpful..not) which I was handling, **but** also raising a screen size config change, which I was not.. hence the OS destroying my activity. Normally when you get a new OpenGL based app in Xamarin.Android you get the following attributes added automagically to your activity.
 
-```
+```csharp
 [Activity (Label = "Some app",
 #if __ANDROID_11__
   HardwareAccelerated=false,
 #endif
   ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden,
   MainLauncher = true)]
-
 ```
 
 These tell android that you want to handle these changes and not the OS, so the OS doesn't restart you app when this stuff happens. Because of this change in Android 3.2+ we need to add the ScreenSize enumeration as well like so
 
-```
+```csharp
 [Activity (Label = "Some app",
 #if __ANDROID_11__
   HardwareAccelerated=false,

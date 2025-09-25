@@ -19,7 +19,7 @@ One of the many requests I see from customers of Xamarin.Android is the ability 
 
 Most people already know about the "SignAndroidPackage" target which is available on Xamarin.Android projects. If not basically you can use this target to create a Signed package, most people would use this on a Continuous Integration (CI) server. You can use it like so
 
-```
+```bash
   msbuild MyProject.csproj /t:SignAndroidPackage
 ```
 
@@ -29,7 +29,7 @@ Now we want to run a script after this has been done, Custom Commands can't be u
 
 First thing to do is open the .csproj of your application in your favourite editor and find the last </Project> element right at the bottom of the file. Next we define a new target just _above_ the </Project> element like so
 
-```
+```xml
 <Target Name="AfterAndroidSignPackage" AfterTargets="SignAndroidPackage">
    <Message Text="AfterSignAndroidPackage Target Ran" />
 </Target>
@@ -38,7 +38,7 @@ First thing to do is open the .csproj of your application in your favourite edit
 
 Save the .csproj and then run the command
 
-```
+```bash
   msbuild MyProject.csproj /t:SignAndroidPackage
 ```
 
@@ -48,7 +48,7 @@ Now we have a target that will run after the package has been signed. Next this 
 
 Fortunately we have a way of conditionally executing targets using the [Condition](https://msdn.microsoft.com/en-us/library/7szfhaft.aspx) attribute. This means we can do something like
 
-```
+```xml
 <Exec Condition=" '$(OS)' != 'Unix' " Command="dir" />
 <Exec Condition=" '$(OS)' == 'Unix' " Command="ls" />
 
@@ -56,7 +56,7 @@ Fortunately we have a way of conditionally executing targets using the [Conditio
 
 this allows us to run separate commands based on the OS we are running (in this case a directory listing). As you can see we can easily extend this to run a batch file or shell script. So the final target would be
 
-```
+```xml
 <Target Name="AfterAndroidSignPackage" AfterTargets="SignAndroidPackage">
   <Exec Condition=" '$(OS)' != 'Unix' " Command="dir" />
   <Exec Condition=" '$(OS)' == 'Unix' " Command="ls" />

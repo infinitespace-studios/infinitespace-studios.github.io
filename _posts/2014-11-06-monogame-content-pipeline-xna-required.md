@@ -19,7 +19,7 @@ Some of you might have heard that [MonoGame](http://monogame.net) now has its ow
 
 This is a command line tool used to create .xnb files. It works on Windows and Mac (and Linux for some content AFAIK). On windows at the time of writing you will need to download the latest [unstable](http://teamcity.monogame.net/viewLog.html?buildTypeId=MonoGame_DevelopWin&buildId=lastSuccessful&tab=artifacts&buildBranch=%3Cdefault%3E&guest=1#!ossgocr) release from [here](http://teamcity.monogame.net/viewLog.html?buildTypeId=MonoGame_DevelopWin&buildId=lastSuccessful&tab=artifacts&buildBranch=%3Cdefault%3E&guest=1#!ossgocr) to install the tooling. It installs the tools to
 
-```
+```bash
 c:\Program Files (x86)\MSBuild\MonoGame\Tools
 ```
 
@@ -27,7 +27,7 @@ On a Mac  you will need to get the source and compile this tool yourself. I am 
 
 Using the tool is very simple you can either pass all your parameters on the command line  like so
 
-```
+```bash
 MGCB.exe /outputDir:bin/foo/$(Platform) /intermediateDir:obj/foo/($Platform) /rebuild /platform:iOS /build:Textures\wood.png
 ```
 
@@ -37,7 +37,7 @@ The other option is to create a .mgcb response file which contains all the requ
 
 Now a .mgcb file has some distinct advantages. Firstly its compatible with the Pipeline GUI tooling, secondly it allows you do process a bunch of files at once and still have a nice readable file rather than a HUGE command line. Here is a sample .mgcb file
 
-```
+```bash
 # Directories
 /outputDir:bin/foo/$(Platform) 
 /intermediateDir:obj/foo/$(Platform) 
@@ -55,7 +55,7 @@ Now a .mgcb file has some distinct advantages. Firstly its compatible with the P
 
 You can pass this to MGCB using
 
-```
+```bash
 MGCB /platform:Android /@:MyFile.mgcb
 ```
 
@@ -71,7 +71,7 @@ This tool is just a GUI over the top of MGCB.exe, currently its only available o
 
 I'm not going to go into the details of how to use the Pipeline tool as it's covered pretty well in the [documentation](http://www.monogame.net/documentation/?page=Pipeline). Like the MGCB tool it is included in the latest [unstable](http://teamcity.monogame.net/viewLog.html?buildTypeId=MonoGame_DevelopWin&buildId=lastSuccessful&tab=artifacts&buildBranch=%3Cdefault%3E&guest=1#!ossgocr) installers and can be found in
 
-```
+```bash
 c:\Program Files (x86)\MSBuild\MonoGame\Tools
 ```
 
