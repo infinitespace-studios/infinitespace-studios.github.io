@@ -1,4 +1,5 @@
 ---
+layout: default
 title: "Xamarin Android - Running a script after Signing the APK"
 date: "2015-08-14"
 categories: 
@@ -10,6 +11,7 @@ tags:
   - "android-2"
   - "msbuild"
   - "xamarin"
+permalink: /general/xamarin-android-runnning-script-after-signing-apk/
 ---
 
 One of the many requests I see from customers of Xamarin.Android is the ability to "_run a script"_ after the package has been built and signed, or do some process before the build process. Allot of people end up trying to use the CustomCommands which are available in the IDE to do this work, and shy away from getting down and dirty with MSBuild. The thing is, sometimes MSBuild is the only way to get certain things done.

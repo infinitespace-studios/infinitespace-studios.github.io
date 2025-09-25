@@ -186,7 +186,7 @@ screenManager=new ScreenManager (this, 800, 480);
 
 ```
 
-You will need to pass in the resolution your game was designed for, in this case 800×480. Then in all the places where we call SpriteBatch.Begin() we need to pass in the screenManager.Scale matrix like so
+You will need to pass in the resolution your game was designed for, in this case 800×480.Then in all the places where we call SpriteBatch.Begin() we need to pass in the screenManager.Scale matrix like so
 
 ```csharp
 spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, ScreenManager.Scale);
@@ -207,4 +207,4 @@ position.X= ScreenManager.Viewport.Width/2- menuEntry.GetWidth(this)/2;
 
 ```
 
-This should be all you need. In the next post we will look at the changes we need to make to the InputState.cs class to get the mouse and gesture inputs scaled as well. You can download a copy of the modified ScreenManager class [here](http://www.infinitespace-studios.co.uk/code/ScreenManager.cs).
+This should be all you need. In the next post we will look at the changes we need to make to the InputState.cs class to get the mouse and gesture inputs scaled as well.You can download a copy of the modified ScreenManager class [here](http://www.infinitespace-studios.co.uk/code/ScreenManager.cs).

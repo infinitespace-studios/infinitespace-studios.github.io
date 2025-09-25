@@ -1,6 +1,8 @@
 ---
+layout: default
 title: "MonoGame Pipeline Tool available for MacOS"
 date: "2015-01-09"
+permalink: /general/monogame-pipeline-tool-available-for-macos/
 categories: 
   - "gamedevelopment"
   - "general"
@@ -12,9 +14,11 @@ tags:
 
 Its finally done, the Pipeline tool is now working on OSX (and Linux). Over the christmas break I worked with another MonoGame contributor (@cra0zy) to finish off the Tool and build the Mac OS Installer.
 
-The app itself behaves like the one on Windows so we have a fairly consistent experience. The command line tool MGCB is bundled with the App so you can use the following as part of a build process
+The app itself behaves like the one on Windows so we have a fairly consistent experience. The command line tool MGCB is bundled with the App so you can use the following as part of a build process:
 
-> mono /Applications/Pipeline.app/Contents/MonoBundle/MGCB.exe /@:SomeMGCBFile.mgcb
+```bash
+mono /Applications/Pipeline.app/Contents/MonoBundle/MGCB.exe /@:SomeMGCBFile.mgcb
+```
 
 You can compile Textures, Fonts, 3D Models and Audio using this tool and the requirement to have XNA installed is totally gone. You can also use your own content processors and importers, exactly how you do that will be a topic of a future post :)
 

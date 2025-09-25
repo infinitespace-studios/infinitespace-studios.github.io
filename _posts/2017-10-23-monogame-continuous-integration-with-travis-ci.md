@@ -1,4 +1,5 @@
 ---
+layout: default
 title: "MonoGame - Continuous Integration with Travis CI."
 date: "2017-10-23"
 categories: 
@@ -10,21 +11,22 @@ tags:
   - "gamedev"
   - "monogame"
   - "travisci"
+permalink: 
 ---
 
 So you have a game, and you want to get regular builds for people to test. Now you can do a build yourself , but you're not a philistine are you? You want to use Continuous Integration (CI).
 
-### What is Continuous Integration
+## What is Continuous Integration
 
 If you don't know, CI is where a server somewhere builds your projects for you when you commit changes. The idea being you script up the steps you need doing and let the server do all the hard work. I've used this on many occasions. Any time I find myself doing the same job more that twice, I'll think about scripting it or getting a machine to do the job.
 
 Now there are allot of CI systems out there, Team City, Jenkins, TFS to name a few. However this post is going to concentrate on the free offering of Travis CI. The reasons for this are, firstly its free, secondly it offers Mac hosts. Having a Mac host in the cloud for a CI system is quite a unusual thing.
 
-### Setup Travis.
+## Setup Travis
 
 Signing up for travis is quite simple. Head over to [https://travis-ci.org](https://travis-ci.org) and Signup with your Git hub account. It will ask you which repositories it needs access to. The process is really simple. Note that [https://travis-ci.org](https://travis-ci.org) is the open source free offering for projects which are..open source. Travis CI does offer paid for services for close source projects but the setup is pretty much the same.
 
-### Scripting your .travis.yaml
+## Scripting your .travis.yaml
 
 The core of Travis CI is that is looks for a very particular build script, \`.travis.yaml\`. If you have this file in the root of your repo, Travis CI will use it and run the build. It can work without the script, but I prefer to script things since it gives you more control.
 
@@ -48,6 +50,6 @@ Note the "%3E" characters are required. The next step is to build the project. S
 
 First thing is to do a Nuget restore. For this project I am using the Remote Effect Pipeline extension from my previous post, so I need to make sure that package is in place. But if you are using MonoGame Nuget package you will need to do this as well. Next step is to build the app, as normal. Rather than building the entire solution I am building a specific project. But if you want to build both iOS, DesktopGL etc you can setup a configuration in the Solution which just builds those projects.
 
-### Thats it!
+## Thats it
 
 Not much too it is there. If you have an open source project (or a closed source one) there is absolutely no reason not to setup some sort of Continuous Integration.

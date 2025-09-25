@@ -2,7 +2,7 @@
 layout: default
 title: "Make game in 4 weeks Challenge - Weeks 1-2"
 date: "2014-01-19"
-permalink: "general/make-game-in-4-weeks-challenge-weeks-1-2/"
+permalink: /general/make-game-in-4-weeks-challenge-weeks-1-2
 categories: 
   - "gamedevelopment"
   - "general"

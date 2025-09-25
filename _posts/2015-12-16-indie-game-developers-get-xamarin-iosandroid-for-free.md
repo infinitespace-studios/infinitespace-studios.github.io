@@ -1,4 +1,5 @@
 ---
+layout: default
 title: "Indie Game Developers Get Xamarin iOS/Android for Free."
 date: "2015-12-16"
 categories: 
@@ -11,6 +12,7 @@ tags:
   - "monogame"
   - "xamarin"
   - "xna"
+permalink: /general/indie-game-developers-get-xamarin-iosandroid-for-free/
 ---
 
 Xamarin [announced](https://blog.xamarin.com/indie-game-developers-get-xamarin-for-free/) something awesome yesterday.

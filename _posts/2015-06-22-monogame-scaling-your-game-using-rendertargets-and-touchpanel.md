@@ -1,4 +1,5 @@
 ---
+layout: default
 title: "MonoGame - Scaling your Game using RenderTargets and TouchPanel"
 date: "2015-06-22"
 categories: 
@@ -10,6 +11,7 @@ tags:
   - "csharp-2"
   - "gamedev"
   - "monogame"
+permalink: /general/monogame-scaling-your-game-using-rendertargets-and-touchpanel/
 ---
 
 So in one of my previous blog posts we covered how to scale your game for multiple screen resolutions using the matrix parameter in the SpriteBatch. Like all good problems that was just one solution or many, and since then things have moved on a bit. While that technique is still valid, the bits we did about scaling the Touch Points are no longer really necessary. In this post we'll discover how to use the MonoGame Touch panel to get scaled inputs for touch and mouse as well as how to use RenderTargets to scale your game.

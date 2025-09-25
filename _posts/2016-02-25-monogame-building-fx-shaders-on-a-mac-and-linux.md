@@ -1,4 +1,5 @@
 ---
+layout: default
 title: "MonoGame - Building .fx Shaders on a Mac (and Linux)"
 date: "2016-02-25"
 categories: 
@@ -11,6 +12,7 @@ tags:
   - "gamedev"
   - "monogame"
   - "xna"
+permalink: /general/monogame-building-fx-shaders-on-a-mac-and-linux/
 ---
 
 One of the issues MonoGame Mac (and Linux) developers face is not being able to build shaders. Getting a good shader HLSL compiler to work on a non Windows platform is tricky. Work is under way to get this done but it will take some time to get right.
