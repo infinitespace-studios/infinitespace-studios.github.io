@@ -36,35 +36,34 @@ If you want to take a look at all the code you can find it [here](https://githu
 
 ### The Code
 
-```
-		public override CompiledEffectContent Process (EffectContent input, ContentProcessorContext context)
-		{
-			if (Environment.OSVersion.Platform != PlatformID.Unix) {
-				return base.Process (input, context);
-			}
-			var code = input.EffectCode;
-			var platform = context.TargetPlatform;
-			var client = new HttpClient ();
-			client.BaseAddress = new Uri (string.Format ("{0}://{1}:{2}/", Protocol, RemoteAddress, RemotePort));
-			var response = client.PostAsync ("api/Effect", new StringContent (JsonSerializer (new Data  () {
-				Platform = platform.ToString(),
-				Code = code
-			}), Encoding.UTF8, "application/json")).Result;
-			if (response.IsSuccessStatusCode) {
-				string data = response.Content.ReadAsStringAsync ().Result;
-				var result = JsonDeSerializer (data);
-				if (!string.IsNullOrEmpty (result.Error)) {
-					throw new Exception (result.Error);
-				}
-				if (result.Compiled == null || result.Compiled.Length == 0)
-					throw new Exception ("There was an error compiling the effect");
-				return new CompiledEffectContent (result.Compiled);
-			} else {
-				throw new Exception (response.StatusCode.ToString ());
-			}
-			return null;
-		}
-
+```csharp
+public override CompiledEffectContent Process (EffectContent input, ContentProcessorContext context)
+{
+    if (Environment.OSVersion.Platform != PlatformID.Unix) {
+        return base.Process (input, context);
+    }
+    var code = input.EffectCode;
+    var platform = context.TargetPlatform;
+    var client = new HttpClient ();
+    client.BaseAddress = new Uri (string.Format ("{0}://{1}:{2}/", Protocol, RemoteAddress, RemotePort));
+    var response = client.PostAsync ("api/Effect", new StringContent (JsonSerializer (new Data  () {
+        Platform = platform.ToString(),
+        Code = code
+    }), Encoding.UTF8, "application/json")).Result;
+    if (response.IsSuccessStatusCode) {
+        string data = response.Content.ReadAsStringAsync ().Result;
+        var result = JsonDeSerializer (data);
+        if (!string.IsNullOrEmpty (result.Error)) {
+            throw new Exception (result.Error);
+        }
+        if (result.Compiled == null || result.Compiled.Length == 0)
+            throw new Exception ("There was an error compiling the effect");
+        return new CompiledEffectContent (result.Compiled);
+    } else {
+        throw new Exception (response.StatusCode.ToString ());
+    }
+    return null;
+}
 ```
 
 Pretty simple code isn't it! At some point I'll see if we can replace the **_.Result_** code with **_async/await_**. But I'm not entirely sure how the Pipeline will respond to that.
