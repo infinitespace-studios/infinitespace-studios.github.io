@@ -12,9 +12,9 @@ permalink: /about
   </div>
 </div>
 
-Just a guy who likes working on game development libraries in his spare time. Over 30 years development experience in C# .NET and various other languages and platforms. A regular contributor to the open source MonoGame project and developer at Microsoft working on the .NET Android SDK.
+Just a guy who likes working on game development libraries and games in his spare time. Over 30 years development experience in C# .NET and various other languages and platforms. A regular contributor to the open source MonoGame project and developer at Microsoft working on the Azure Stuff.
 
 Currently serving as President of the [MonoGame Foundation](https://monogame.net)
 
-- Follow me on Twitter: [@infspacestudios](https://twitter.com/infspacestudios)
+- Follow me on BlSky: [@infspacestudios](https://bsky.app/profile/infspacestudios.bsky.social)
 - Follow me on Mastodon: [@infspacestudios](https://mastodon.gamedev.place/@infspacestudios)
