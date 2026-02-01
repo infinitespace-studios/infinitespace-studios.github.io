@@ -16,5 +16,5 @@ Just a guy who likes working on game development libraries and games in his spar
 
 Currently serving as President of the [MonoGame Foundation](https://monogame.net)
 
-- Follow me on BlSky: [@infspacestudios](https://bsky.app/profile/infspacestudios.bsky.social)
+- Follow me on BSky: [@infspacestudios](https://bsky.app/profile/infspacestudios.bsky.social)
 - Follow me on Mastodon: [@infspacestudios](https://mastodon.gamedev.place/@infspacestudios)
