@@ -34,4 +34,7 @@ I also decided to add an extra life mechanic. However, it will not behave in the
 
 This was a really enjoyable experience, similar to the game in 4 weeks challenge I took back in 2014. But its been 12 years since then. I've learnt allot. I would say technology has moved on but in this case I was using MonoGame still. The API for that library hasn't really changed since 2014, but that is a good thing. It means the knowledge on how to tackle things from over a decade ago is still relevant today.
 
-The game will be released on [itch.io](https://infinitespace-studios.itch.io/co-operoids).
+The game has been released on [itch.io](https://infinitespace-studios.itch.io/co-operoids).
+
+<iframe frameborder="0" src="https://itch.io/embed/4195013?linkback=true&amp;bg_color=000000&amp;fg_color=e9e9e9&amp;link_color=5be4fa" width="552" height="167"><a href="https://infinitespace-studios.itch.io/co-operoids">Co-operoids by infinitespace-studios</a></iframe>
+
