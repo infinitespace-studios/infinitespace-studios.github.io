@@ -21,6 +21,7 @@
         <nav class="main-nav">
           <ul>
             <li><a href="/">Blog</a></li>
+            <li><a href="/games">Games</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/monogame-ports">Ports</a></li>
           </ul>
@@ -29,8 +30,11 @@
     </header>
 
     <main class="site-content">
-      <div class="container">
-        {{ content }}
+      <div class="container-with-sidebar">
+        <div class="main-content">
+          {{ content }}
+        </div>
+        {% include sidebar.html %}
       </div>
     </main>
 

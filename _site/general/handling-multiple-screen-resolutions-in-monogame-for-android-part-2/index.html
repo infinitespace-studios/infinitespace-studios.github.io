@@ -39,6 +39,7 @@
         <nav class="main-nav">
           <ul>
             <li><a href="/">Blog</a></li>
+            <li><a href="/games">Games</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/monogame-ports">Ports</a></li>
           </ul>
@@ -47,8 +48,9 @@
     </header>
 
     <main class="site-content">
-      <div class="container">
-        <p>In my previous <a href="http://infinitespace-studios.co.uk/general/handling-multiple-screen-resolutions-in-monogame-for-android-part-1">post</a> we looked at how to modify the <a href="http://create.msdn.com/en-US/education/catalog/sample/game_state_management">ScreenManager</a> class to support multiple resolutions. This works fine but what we also need is a way to scale the inputs from the Mouse or TouchScreen so that they operate at the same virtual resolution as the game does.</p>
+      <div class="container-with-sidebar">
+        <div class="main-content">
+          <p>In my previous <a href="http://infinitespace-studios.co.uk/general/handling-multiple-screen-resolutions-in-monogame-for-android-part-1">post</a> we looked at how to modify the <a href="http://create.msdn.com/en-US/education/catalog/sample/game_state_management">ScreenManager</a> class to support multiple resolutions. This works fine but what we also need is a way to scale the inputs from the Mouse or TouchScreen so that they operate at the same virtual resolution as the game does.</p>
 
 <p>We already put in place the following properties in the ScreenManager</p>
 
@@ -115,6 +117,17 @@
 <p>As before the complete code can be downloaded <a href="http://www.infinitespace-studios.co.uk/code/InputState.cs">http://www.infinitespace-studios.co.uk/code/InputState.cs</a>, or you can download the both files <a href="http://www.infinitespace-studios.co.uk/code/InputState.cs">InputState.cs</a> <a href="http://www.infinitespace-studios.co.uk/code/ScreenManager.cs">ScreenManager.cs</a></p>
 
 <p>Update : The MouseGestureType is the InputState is from the CatapultWars sample and can be downloaded <a href="http://www.infinitespace-studios.co.uk/code/MouseGestureType.cs">http://www.infinitespace-studios.co.uk/code/MouseGestureType.cs</a></p>
+
+        </div>
+        <aside class="games-sidebar">
+  <h3>My Games</h3>
+  <div class="game-widgets">
+    <iframe frameborder="0" src="https://itch.io/embed/4195013?border_width=0&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=5becfa" width="206" height="165"><a href="https://infinitespace-studios.itch.io/co-operoids">Co-operoids by infinitespace-studios</a></iframe>
+  </div>
+  <div class="game-widgets">
+    <iframe frameborder="0" src="https://itch.io/embed/120692?border_width=0&amp;bg_color=000000&amp;link_color=5bfa8b&amp;border_color=000000" width="206" height="165"><a href="https://infinitespace-studios.itch.io/vector-rumble">Vector Rumble by infinitespace-studios</a></iframe>
+  </div>
+</aside>
 
       </div>
     </main>

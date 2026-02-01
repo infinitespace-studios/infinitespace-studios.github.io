@@ -39,6 +39,7 @@
         <nav class="main-nav">
           <ul>
             <li><a href="/">Blog</a></li>
+            <li><a href="/games">Games</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/monogame-ports">Ports</a></li>
           </ul>
@@ -47,8 +48,9 @@
     </header>
 
     <main class="site-content">
-      <div class="container">
-        <p>So …. supporting compressed textures on android is a right pain. There are a number of different graphics chips in play and they all support different texture compression formats, not very helpful. The only common format that is supported by all devices is the ETC1 format (ETC2 is GLES 3.0 only), the problem with this format is it doesn’t support an alpha channel. Most game developers out there will know that the alpha channel is kinda important for games. So how can we make use of ETC1 and get a alpha channel at the same time?</p>
+      <div class="container-with-sidebar">
+        <div class="main-content">
+          <p>So …. supporting compressed textures on android is a right pain. There are a number of different graphics chips in play and they all support different texture compression formats, not very helpful. The only common format that is supported by all devices is the ETC1 format (ETC2 is GLES 3.0 only), the problem with this format is it doesn’t support an alpha channel. Most game developers out there will know that the alpha channel is kinda important for games. So how can we make use of ETC1 and get a alpha channel at the same time?</p>
 
 <p>There are a number of different methods that I’ve found on the net mostly have to do with storing the alpha channel separately and combining them in the fragment shader, <a href="http://malideveloper.arm.com/develop-for-mali/sample-code/etcv1-texture-compression-and-alpha-channels/">this</a> article seems to contain the most accepted solutions. But personally I hate the idea of having to have two textures or mess about with texture coordinates to sample the data from different parts. If only there was another way… well lets turn back the clock a bit an use a technique we used to use before such a thing as an alpha channel even existed.</p>
 
@@ -145,6 +147,17 @@
 <p>Well hopefully this will be useful for someone. Next time around I’ll be going into how to support texture compression formats like PVRTC, ATITC and S3TC on your android devices. These formats should cover most of the devices out there (but not all) and support a full alpha channel, but if you are after full compatibility then ETC1 is probably the way to go.</p>
 
 <p>In the mean time the code from this article is available on <a href="https://github.com/infinitespace-studios/Blog/tree/master/Etc1Alpha">github</a>.</p>
+
+        </div>
+        <aside class="games-sidebar">
+  <h3>My Games</h3>
+  <div class="game-widgets">
+    <iframe frameborder="0" src="https://itch.io/embed/4195013?border_width=0&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=5becfa" width="206" height="165"><a href="https://infinitespace-studios.itch.io/co-operoids">Co-operoids by infinitespace-studios</a></iframe>
+  </div>
+  <div class="game-widgets">
+    <iframe frameborder="0" src="https://itch.io/embed/120692?border_width=0&amp;bg_color=000000&amp;link_color=5bfa8b&amp;border_color=000000" width="206" height="165"><a href="https://infinitespace-studios.itch.io/vector-rumble">Vector Rumble by infinitespace-studios</a></iframe>
+  </div>
+</aside>
 
       </div>
     </main>

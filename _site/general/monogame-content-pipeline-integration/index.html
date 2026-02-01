@@ -39,6 +39,7 @@
         <nav class="main-nav">
           <ul>
             <li><a href="/">Blog</a></li>
+            <li><a href="/games">Games</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/monogame-ports">Ports</a></li>
           </ul>
@@ -47,8 +48,9 @@
     </header>
 
     <main class="site-content">
-      <div class="container">
-        <p>In the past it might seem that Windows users of MonoGame get all the cool stuff, and Mac / Linux users are left out in the cold. To be honest for a while that was true, but the great news is that more recently that has begun to change. On going community efforts have resulted in both MacOS and Linux installers which will download and install templates into the Xamarin Studio and MonoDevelop. They also install the Pipeline tool which is a GUI you can use to build your content for your game.</p>
+      <div class="container-with-sidebar">
+        <div class="main-content">
+          <p>In the past it might seem that Windows users of MonoGame get all the cool stuff, and Mac / Linux users are left out in the cold. To be honest for a while that was true, but the great news is that more recently that has begun to change. On going community efforts have resulted in both MacOS and Linux installers which will download and install templates into the Xamarin Studio and MonoDevelop. They also install the Pipeline tool which is a GUI you can use to build your content for your game.</p>
 
 <p>All that was great, but again Windows has something that Mac and Linux developers just didn’t have access to. Automatic Content Building, this is where you just include the .mgcb file in your project, set its Build Action to “MonoGameContentReference” and providing you created the project via one of the templates it would “just work”. Your .xnb files would appear as if by magic in your Output Directory without all that messy manual linking of .xnbs.</p>
 
@@ -82,6 +84,17 @@
 </ol>
 
 <p>Now providing you have the latest development release this should all work. So if you have an old project go ahead and give it a try, its well worth it :)</p>
+
+        </div>
+        <aside class="games-sidebar">
+  <h3>My Games</h3>
+  <div class="game-widgets">
+    <iframe frameborder="0" src="https://itch.io/embed/4195013?border_width=0&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=5becfa" width="206" height="165"><a href="https://infinitespace-studios.itch.io/co-operoids">Co-operoids by infinitespace-studios</a></iframe>
+  </div>
+  <div class="game-widgets">
+    <iframe frameborder="0" src="https://itch.io/embed/120692?border_width=0&amp;bg_color=000000&amp;link_color=5bfa8b&amp;border_color=000000" width="206" height="165"><a href="https://infinitespace-studios.itch.io/vector-rumble">Vector Rumble by infinitespace-studios</a></iframe>
+  </div>
+</aside>
 
       </div>
     </main>

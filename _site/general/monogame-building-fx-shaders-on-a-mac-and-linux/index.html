@@ -39,6 +39,7 @@
         <nav class="main-nav">
           <ul>
             <li><a href="/">Blog</a></li>
+            <li><a href="/games">Games</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/monogame-ports">Ports</a></li>
           </ul>
@@ -47,8 +48,9 @@
     </header>
 
     <main class="site-content">
-      <div class="container">
-        <p>One of the issues MonoGame Mac (and Linux) developers face is not being able to build shaders. Getting a good shader HLSL compiler to work on a non Windows platform is tricky. Work is under way to get this done but it will take some time to get right.</p>
+      <div class="container-with-sidebar">
+        <div class="main-content">
+          <p>One of the issues MonoGame Mac (and Linux) developers face is not being able to build shaders. Getting a good shader HLSL compiler to work on a non Windows platform is tricky. Work is under way to get this done but it will take some time to get right.</p>
 
 <p>That leaves Mac (and Linux) developers a bit stuck. Well there is a solution, a custom Content Pipeline processor. This is where the Content Pipeline can show its pure awesomeness.</p>
 
@@ -122,6 +124,17 @@
 <h3 id="conclusion">Conclusion</h3>
 
 <p>Hopefully this post has shown you what a cool thing the Pipeline system is. One of my future posts will be about creating a pipeline extension from scratch. So if you are interested watch out for it. In the mean time, if you are a mac user. Get compiling those shaders!</p>
+
+        </div>
+        <aside class="games-sidebar">
+  <h3>My Games</h3>
+  <div class="game-widgets">
+    <iframe frameborder="0" src="https://itch.io/embed/4195013?border_width=0&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=5becfa" width="206" height="165"><a href="https://infinitespace-studios.itch.io/co-operoids">Co-operoids by infinitespace-studios</a></iframe>
+  </div>
+  <div class="game-widgets">
+    <iframe frameborder="0" src="https://itch.io/embed/120692?border_width=0&amp;bg_color=000000&amp;link_color=5bfa8b&amp;border_color=000000" width="206" height="165"><a href="https://infinitespace-studios.itch.io/vector-rumble">Vector Rumble by infinitespace-studios</a></iframe>
+  </div>
+</aside>
 
       </div>
     </main>

@@ -39,6 +39,7 @@
         <nav class="main-nav">
           <ul>
             <li><a href="/">Blog</a></li>
+            <li><a href="/games">Games</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/monogame-ports">Ports</a></li>
           </ul>
@@ -47,8 +48,9 @@
     </header>
 
     <main class="site-content">
-      <div class="container">
-        <p>Some of you might have heard that <a href="http://monogame.net">MonoGame</a> now has its own content pipeline tooling, and it works! As a result the need to install the XNA 4.0 SDK is no longer required, unless you want to target Xbox 360 of course.  For those of you looking for documentation on the new tooling you can head over to <a href="http://www.monogame.net/documentation/?page=Pipeline">here</a> for information on the Pipeline GUI and <a href="http://www.monogame.net/documentation/?page=MGCB">here</a> for information on the MGCB tool. But I’ll give you a basic overview on how this all hangs together.</p>
+      <div class="container-with-sidebar">
+        <div class="main-content">
+          <p>Some of you might have heard that <a href="http://monogame.net">MonoGame</a> now has its own content pipeline tooling, and it works! As a result the need to install the XNA 4.0 SDK is no longer required, unless you want to target Xbox 360 of course.  For those of you looking for documentation on the new tooling you can head over to <a href="http://www.monogame.net/documentation/?page=Pipeline">here</a> for information on the Pipeline GUI and <a href="http://www.monogame.net/documentation/?page=MGCB">here</a> for information on the MGCB tool. But I’ll give you a basic overview on how this all hangs together.</p>
 
 <h3 id="mgcbexe">MGCB.exe</h3>
 
@@ -120,6 +122,17 @@
 <p>One good example of this is the content processing on a Mac (and Linux), for the most part it will work for Textures, Models, Fonts and Audio (mostly) it will work fine, but there is no installer. Also shaders will NOT work, this is mainly because HLSL is just not supported on a Mac (On a side note the team are abut to embark on a project to support GLSL in the .fx file format which will allow users on a Mac to write their shaders using GLSL but at the time of writing if you use custom shaders you will need to compile those on a windows box).</p>
 
 <p>People might be tempted to start complaining about how ‘it doesn’t work on a Mac or Linux’ and yes the support for those platforms is lagging behind the windows support (mostly due to a lack of contributors on those platforms). But we are working on it so please be patient and if its a feature you really really really want and no one seems to be working on it please feel free to ‘<em>go <a href="https://github.com/mono/MonoGame/fork">fork</a> and contribute’</em>, just let the team know what you are up to so two people don’t end up working on the same thing.</p>
+
+        </div>
+        <aside class="games-sidebar">
+  <h3>My Games</h3>
+  <div class="game-widgets">
+    <iframe frameborder="0" src="https://itch.io/embed/4195013?border_width=0&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=5becfa" width="206" height="165"><a href="https://infinitespace-studios.itch.io/co-operoids">Co-operoids by infinitespace-studios</a></iframe>
+  </div>
+  <div class="game-widgets">
+    <iframe frameborder="0" src="https://itch.io/embed/120692?border_width=0&amp;bg_color=000000&amp;link_color=5bfa8b&amp;border_color=000000" width="206" height="165"><a href="https://infinitespace-studios.itch.io/vector-rumble">Vector Rumble by infinitespace-studios</a></iframe>
+  </div>
+</aside>
 
       </div>
     </main>
