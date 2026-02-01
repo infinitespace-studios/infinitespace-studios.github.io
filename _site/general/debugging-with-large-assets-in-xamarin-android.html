@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Debugging with Large Assets in Xamarin Android | Infinitespace Studios</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Debugging with Large Assets in Xamarin Android" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="So you have a great android project you are working on. It might be a game or an app it doesn’t matter, the key thing is you have a ton of Assets you want to include. Not Resources, i.e stuff you find in the resources folder like layout/values etc, but Assets we are talking graphics, sound, music you name it." />
+<meta property="og:description" content="So you have a great android project you are working on. It might be a game or an app it doesn’t matter, the key thing is you have a ton of Assets you want to include. Not Resources, i.e stuff you find in the resources folder like layout/values etc, but Assets we are talking graphics, sound, music you name it." />
+<link rel="canonical" href="http://localhost:4000/general/debugging-with-large-assets-in-xamarin-android" />
+<meta property="og:url" content="http://localhost:4000/general/debugging-with-large-assets-in-xamarin-android" />
+<meta property="og:site_name" content="Infinitespace Studios" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2014-04-02T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Debugging with Large Assets in Xamarin Android" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2014-04-02T00:00:00+01:00","datePublished":"2014-04-02T00:00:00+01:00","description":"So you have a great android project you are working on. It might be a game or an app it doesn’t matter, the key thing is you have a ton of Assets you want to include. Not Resources, i.e stuff you find in the resources folder like layout/values etc, but Assets we are talking graphics, sound, music you name it.","headline":"Debugging with Large Assets in Xamarin Android","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/general/debugging-with-large-assets-in-xamarin-android"},"url":"http://localhost:4000/general/debugging-with-large-assets-in-xamarin-android"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom head content - add custom meta tags, analytics, etc. here -->
+
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-content">
+        <a href="/" class="logo-link">
+          <img src="/images/issheader.png" alt="Infinitespace Studios" class="site-logo">
+          <span class="site-title">Infinitespace Studios</span>
+        </a>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/">Blog</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/monogame-ports">Ports</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-content">
+      <div class="container">
+        <p>So you have a great android project you are working on. It might be a game or an app it doesn’t matter, the key thing is you have a ton of Assets you want to include. Not Resources, i.e stuff you find in the resources folder like layout/values etc, but Assets we are talking graphics, sound, music you name it.</p>
+
+<p>If you have more than a few of these assets you are probably already suffering from fairly lengthy build times. Packaging those assets up into the .apk does take some time, unfortunately its just a side effect of how stuff works on android. The problem is these long build times make debugging the app a real issue. Its like going back to the days when you needed to get a coffee while your app builds. There is a way around it.. C# to the rescue :)</p>
+
+<p>What you can do is write an Extension method for the Android.Content.Res.AssetManager which will conditionally look in the Assets in the .apk or get that data from an external file. So we upload all the assets in a zip file to the device and then just run the app with no assets in it what so ever. We get quick build and debug times and we only need to update that zip file if the assets change or stuff gets added.</p>
+
+<p>So I put together this.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">AssetMgrExt</span> <span class="p">{</span>
+
+    <span class="k">static</span> <span class="n">Java</span><span class="p">.</span><span class="n">Util</span><span class="p">.</span><span class="n">Zip</span><span class="p">.</span><span class="n">ZipFile</span> <span class="n">zip</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Initialize</span><span class="p">(</span><span class="kt">string</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">zip</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Java</span><span class="p">.</span><span class="n">Util</span><span class="p">.</span><span class="n">Zip</span><span class="p">.</span><span class="nf">ZipFile</span> <span class="p">(</span><span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Close</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">zip</span><span class="p">.</span><span class="nf">Close</span> <span class="p">();</span>
+        <span class="n">zip</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="n">System</span><span class="p">.</span><span class="n">IO</span><span class="p">.</span><span class="n">Stream</span> <span class="nf">OpenExt</span><span class="p">(</span><span class="k">this</span> <span class="n">Android</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">Res</span><span class="p">.</span><span class="n">AssetManager</span> <span class="n">mgr</span><span class="p">,</span> <span class="kt">string</span> <span class="n">filename</span><span class="p">)</span> <span class="p">{</span>
+<span class="cp">#if !DEBUG
+</span>        <span class="k">return</span> <span class="n">mgr</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+<span class="cp">#else
+</span>        <span class="k">if</span> <span class="p">(</span><span class="n">zip</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">entry</span> <span class="p">=</span> <span class="n">zip</span><span class="p">.</span><span class="nf">GetEntry</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">entry</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"Could not find {0} in external zip"</span><span class="p">,</span> <span class="n">filename</span><span class="p">));</span>
+            <span class="k">try</span> <span class="p">{</span>
+            
+            <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">s</span> <span class="p">=</span> <span class="n">zip</span><span class="p">.</span><span class="nf">GetInputStream</span><span class="p">(</span><span class="n">entry</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">System</span><span class="p">.</span><span class="n">IO</span><span class="p">.</span><span class="n">MemoryStream</span> <span class="n">ms</span> <span class="p">=</span> <span class="k">new</span> <span class="n">System</span><span class="p">.</span><span class="n">IO</span><span class="p">.</span><span class="nf">MemoryStream</span><span class="p">();</span>
+                <span class="n">s</span><span class="p">.</span><span class="nf">CopyTo</span><span class="p">(</span><span class="n">ms</span><span class="p">);</span>
+                <span class="n">ms</span><span class="p">.</span><span class="n">Position</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+                <span class="k">return</span> <span class="n">ms</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">finally</span> <span class="p">{</span>
+                <span class="n">entry</span><span class="p">.</span><span class="nf">Dispose</span><span class="p">();</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+        <span class="k">else</span>  <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">InvalidOperationException</span><span class="p">(</span><span class="s">"Call Initialize first!!"</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="cp">#endif
+</span>    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Add it to your project. Call AssetMgrExt.Initialize(“/mnt/sdcard/Dowloads/blah.zip”) at the start of your app and AssetMgrExt.Close() at the end. Then replace all the calls to Assets.Open with Assets.OpenExt to get the data out (don’t forget to free up that memory stream :) ). If you want to get an AssetFileDescriptor (i.e you use Assets.OpenFd) you can write a similar extension and mess about with ParcelFileDescriptor’s etc , but for my own purposes this worked out great.</p>
+
+<p>What I tend to do now is never add assets to the project unless its a small project. Instead I use this extension or something similar during the debugging/development process. For release builds I take a release .apk and run a post build task on it to add the assets later, that way I don’t have to mess about with different projects or msbuild conditionals. I can just build the .apk in release mode and add the assets later before signing using</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aapt add your.apk assets/someasset.foo
+</code></pre></div></div>
+
+<p>That is if for now. Happy coding!</p>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; 2009-2026 Infinitespace Studios. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://github.com/dellis1972" aria-label="GitHub">GitHub</a>
+          <a href="https://mastodon.gamedev.place/@infspacestudios" aria-label="Mastodon">Mastodon</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

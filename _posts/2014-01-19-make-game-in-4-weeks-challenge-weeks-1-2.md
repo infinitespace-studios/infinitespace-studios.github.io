@@ -33,7 +33,7 @@ I made a couple of important decisions before starting to code, I had a few sugg
 
 That said I did borrow the CollisionManager and Weapon system from NetRumble, it was fairly extendable and the Weapon system made implementing my own weapons easy. One of the hard parts was implementing the IR Missiles, getting it to turn towards a aircraft was fairly straight forward, implementing a limited line of sight was a bit more problematic to get right. I'm still not entirely happy with the results as the missile tends to turn before its even left the aircraft rather than waiting a while before it starts to lock-on. But then again I didn't put that in the spec so I didn't change it.
 
-![gameplay](images/gameplay-300x168.png)
+![gameplay](../images/gameplay-300x168.png)
 
 I had some weird bugs during testing which boiled down to me not clearing the CollisionManager between games, so I ended up with ghost objects in the game that players would collide with. Other than that it went pretty smoothly, I think the key was to keep the concept simple to start with. Reusing existing code and samples helped allot, I don't think I would have done it in the time otherwise.
 
@@ -47,4 +47,4 @@ Anyway for those of you wanting to test it out you can get the zip file of the r
 
 Happy coding.
 
-![gameover](images/gameover-300x259.png)
+![gameover](../images/gameover-300x259.png)

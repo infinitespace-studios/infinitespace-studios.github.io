@@ -4,13 +4,17 @@ title: "About"
 permalink: /about
 ---
 
-<a class="noclick"><img alt="Profile Picture" style="width:200px;" src="https://avatars.githubusercontent.com/dellis1972" /></a>
-<h3>Dean Ellis</h3>
-<a href="https://github.com/dellis1972">GitHub Profile</a>
+<div class="profile-section">
+  <img alt="Profile Picture" src="https://avatars.githubusercontent.com/dellis1972" />
+  <div>
+    <h1>Dean Ellis</h1>
+    <p><a href="https://github.com/dellis1972">GitHub Profile</a></p>
+  </div>
+</div>
 
-Just a guy who likes working on game development libraries in his spare time. Over 30 years development experience in C# .net and various other languages and platforms. A regular contributor to the open source MonoGame project and developer at @Microsoft working on the .net Android SDK.
+Just a guy who likes working on game development libraries in his spare time. Over 30 years development experience in C# .NET and various other languages and platforms. A regular contributor to the open source MonoGame project and developer at Microsoft working on the .NET Android SDK.
 
-Currently serving as President of the [MonoGame Foundation](https://momogame.net)
+Currently serving as President of the [MonoGame Foundation](https://monogame.net)
 
-Follow me on twitter [@infspacestudios](https://twitter.com/infspacestudios)
-Follow me on masterdon [@infspacestudios](https://mastodon.gamedev.place/@infspacestudios)
+- Follow me on Twitter: [@infspacestudios](https://twitter.com/infspacestudios)
+- Follow me on Mastodon: [@infspacestudios](https://mastodon.gamedev.place/@infspacestudios)

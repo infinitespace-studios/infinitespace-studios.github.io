@@ -9,7 +9,7 @@ summary: Co-operative Asteroids, an modern spin on a classic.
 So its been a while since I did any blog posts here. For the most part
 I have been busy with live and family. However I finally managed to carve out some time to do some game development.
 
-[![Co-operoids banner](images/co-operoids.png)]
+![Co-operoids banner](../images/co-operoids.png)
 
 ## What is Co-operoids
 
@@ -25,9 +25,12 @@ So just shooting asteroids is fair enough, but how to we deal with things like w
 
 I also decided to add an extra life mechanic. However, it will not behave in the usual way. Typically the player picking up the extra life gets it. But that did not feel like it was in the spirit of the game. So the player most in need of a life gets it, not matter who picks up the extra life. This way you can work together to keep playing. This felt like a nice way to re-enforce the idea that helping each other is the way to win.
 
-[![Co-operoids Gameplay](images/Co-operoids.webm)]
+<video width="100%" autoplay loop muted playsinline>
+  <source src="/images/Co-operoids.webm" type="video/webm">
+  Your browser does not support the video tag.
+</video>
 
-## Conslusion
+## Conclusion
 
 This was a really enjoyable experience, similar to the game in 4 weeks challenge I took back in 2014. But its been 12 years since then. I've learnt allot. I would say technology has moved on but in this case I was using MonoGame still. The API for that library hasn't really changed since 2014, but that is a good thing. It means the knowledge on how to tackle things from over a decade ago is still relevant today.
 

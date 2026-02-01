@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Handling multiple screen resolutions in MonoGame for Android – Part 1 | Infinitespace Studios</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Handling multiple screen resolutions in MonoGame for Android – Part 1" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="When developing for iOS or Windows Phone you don’t really need to take into account different screen resolutions. Yes the iPhone and iPad do scale things differently but on the iPad you provide some special content which will allow the system to scale you game and still get it to look nice." />
+<meta property="og:description" content="When developing for iOS or Windows Phone you don’t really need to take into account different screen resolutions. Yes the iPhone and iPad do scale things differently but on the iPad you provide some special content which will allow the system to scale you game and still get it to look nice." />
+<link rel="canonical" href="http://localhost:4000/general/handling-multiple-screen-resolutions-in-monogame-for-android-part-1" />
+<meta property="og:url" content="http://localhost:4000/general/handling-multiple-screen-resolutions-in-monogame-for-android-part-1" />
+<meta property="og:site_name" content="Infinitespace Studios" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2014-05-22T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Handling multiple screen resolutions in MonoGame for Android – Part 1" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2014-05-22T00:00:00+01:00","datePublished":"2014-05-22T00:00:00+01:00","description":"When developing for iOS or Windows Phone you don’t really need to take into account different screen resolutions. Yes the iPhone and iPad do scale things differently but on the iPad you provide some special content which will allow the system to scale you game and still get it to look nice.","headline":"Handling multiple screen resolutions in MonoGame for Android – Part 1","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/general/handling-multiple-screen-resolutions-in-monogame-for-android-part-1"},"url":"http://localhost:4000/general/handling-multiple-screen-resolutions-in-monogame-for-android-part-1"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom head content - add custom meta tags, analytics, etc. here -->
+
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-content">
+        <a href="/" class="logo-link">
+          <img src="/images/issheader.png" alt="Infinitespace Studios" class="site-logo">
+          <span class="site-title">Infinitespace Studios</span>
+        </a>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/">Blog</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/monogame-ports">Ports</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-content">
+      <div class="container">
+        <p>When developing for iOS or Windows Phone you don’t really need to take into account different screen resolutions. Yes the iPhone and iPad do scale things differently but on the iPad you provide some special content which will allow the system to scale you game and still get it to look nice.</p>
+
+<p>On android its a different environment, there are many different devices, with different capabilities not only with screen resolutions but also CPU, memory and graphics chips. In this particular post I’ll cover how to write you game in such a way that it can handle all the different screen resolutions that the android eco-system can throw at you.</p>
+
+<p>One of the nice things about XNA is that its been about a while and when you develop for Xbox Live you need to take into account screen resolutions because everyone has a different sized television. I came across this blog <a href="http://www.david-amador.com/2010/03/xna-2d-independent-resolution-rendering/">post</a> which outlines a neat solution on handling this particular problem for 2D games. However rather than just bolting this code into a MonoGame android project I decided to update the <a href="http://create.msdn.com/en-US/education/catalog/sample/game_state_management">ScreenManager</a> class to handle multiple resolutions. For those of you that have not come across the <a href="http://create.msdn.com/en-US/education/catalog/sample/game_state_management">ScreenManager</a> class , it is used in many of the XNA samples to handle transitions of screens within your game. It also helps you break up you game into “Screen” which make for more maintainable code.</p>
+
+<p>The plan is to add the following functionality to the ScreenManager</p>
+
+<ol>
+  <li>The ability to set a virtual resolution for the game.This is the resolution that you game is designed to run at, the screen manager will then use this information to scale all the graphics and input so that it works nicely on other resolutions.</li>
+  <li>Expose a Matrix property called Scale which we can use in the SpriteBatch to scale our graphics</li>
+  <li>Expose a Matrix property called InputScale , which is the inverse of the Scale matrix so we can scale the Mouse and Gesture inputs into the virtual resolution.</li>
+  <li>Expose an Vector2 property called InputTranslate  so we can translate our mouse and gesture inputs. This is because as part of the scaling will will make sure the game is always centered, so we will see a boarder around the game to take into account aspect ratio differences.</li>
+  <li>Add a Viewport property which will return the virtual viewport for the game rather than use the GraphicsDevice.Viewport</li>
+</ol>
+
+<p>We need to define a few private fields to store the virtual width/height and a reference to the GraphicsDeviceManager.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="kt">int</span> <span class="n">virtualWidth</span><span class="p">;</span>
+<span class="k">private</span> <span class="kt">int</span> <span class="n">virtualHeight</span><span class="p">;</span>
+<span class="k">private</span> <span class="n">GraphicsDeviceManager</span> <span class="n">graphicsDeviceManager</span><span class="p">;</span>
+<span class="k">private</span> <span class="kt">bool</span> <span class="n">updateMatrix</span> <span class="p">=</span><span class="k">true</span><span class="p">;</span>
+<span class="k">private</span> <span class="n">Matrix</span> <span class="n">scaleMatrix</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="n">Identity</span><span class="p">;</span>
+
+</code></pre></div></div>
+
+<p>Next we add the new properties to the ScreenManager, we should probably have local fields for the these as it will save having to allocate a new Vector2/Viewport/Matrix each time the property is accessed. But for now this will work, we can optimize it later.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="n">Viewport</span> <span class="n">Viewport</span> <span class="p">{</span>
+  <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">Viewport</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">virtualWidth</span><span class="p">,</span> <span class="n">virtualHeight</span><span class="p">);}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="n">Matrix</span> <span class="n">Scale</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">private</span><span class="err"> </span><span class="k">set</span><span class="p">;}</span>
+
+<span class="k">public</span> <span class="n">Matrix</span> <span class="n">InputScale</span> <span class="p">{</span>
+  <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">Invert</span><span class="p">(</span><span class="n">Scale</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="n">Vector2</span> <span class="n">InputTranslate</span> <span class="p">{</span>
+  <span class="k">get</span> <span class="p">{</span> <span class="k">return</span><span class="err"> </span><span class="k">new</span> <span class="nf">Vector2</span><span class="p">(</span><span class="n">GraphicsDevice</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">GraphicsDevice</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="n">Y</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The constructor needs to be modified to include the virtual Width/Height paramerters and to resolve the GraphicsDeviceManager from the game.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">ScreenManager</span><span class="p">(</span><span class="n">Game</span> <span class="n">game</span><span class="p">,</span> <span class="kt">int</span> <span class="n">virtualWidth</span><span class="p">,</span> <span class="kt">int</span> <span class="n">virtualHeight</span><span class="p">):</span><span class="k">base</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="c1">// set the Virtual environment up</span>
+  <span class="k">this</span><span class="p">.</span><span class="n">virtualHeight</span><span class="p">=</span> <span class="n">virtualHeight</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="n">virtualWidth</span><span class="p">=</span> <span class="n">virtualWidth</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="n">graphicsDeviceManager</span><span class="p">=(</span><span class="n">GraphicsDeviceManager</span><span class="p">)</span><span class="n">game</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="nf">GetService</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">IGraphicsDeviceManager</span><span class="p">));</span>
+  <span class="c1">// we must set EnabledGestures before we can query for them, but</span>
+
+  <span class="c1">// we don't assume the game wants to read them.</span>
+  <span class="n">TouchPanel</span><span class="p">.</span><span class="n">EnabledGestures</span><span class="p">=</span> <span class="n">GestureType</span><span class="p">.</span><span class="n">None</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Next is the code to create the Scale matrix. Update the Scale property to look like this. We use the updteMatrix flag to control when to re-generate the scaleMatrix so we don’t have to keep updating it every frame.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">Matrix</span> <span class="n">scaleMatrix</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="n">Identity</span><span class="p">;</span>
+<span class="k">public</span> <span class="n">Matrix</span> <span class="n">Scale</span> <span class="p">{</span> 
+  <span class="k">get</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">updateMatrix</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nf">CreateScaleMatrix</span><span class="p">();</span>
+      <span class="n">updateMatrix</span> <span class="p">=</span><span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">scaleMatrix</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Now implement the CreateScale method, this method will return a Matrix which we wil use to tell the SpriteBatch how to scale the graphics when they finally get drawn.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">protected</span> <span class="k">void</span> <span class="nf">CreateScaleMatrix</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">scaleMatrix</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">CreateScale</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">GraphicsDevice</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="n">Width</span><span class="p">/</span> <span class="n">virtualWidth</span><span class="p">,</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">GraphicsDevice</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="n">Width</span><span class="p">/</span> <span class="n">virtualWidth</span><span class="p">,</span> <span class="m">1f</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>So what we have done so far is coded up all the properties we need to make this work. There are a few other methods we need to write. These methods will setup the GraphicsDevice viewport and ensure that we clear the backbuffer with a Color.Blank so we get that nice letterbox effect.</p>
+
+<p>First thing to do is to update the Draw method of the ScreenManager to call a new method BeginDraw. This method will setup the Viewports and Clear the backbuffer.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">Draw</span><span class="p">(</span><span class="n">GameTime</span> <span class="n">gameTime</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">BeginDraw</span><span class="p">();</span>
+  <span class="k">foreach</span><span class="p">(</span><span class="n">GameScreen</span> <span class="n">screen</span> <span class="k">in</span> <span class="n">screens</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">screen</span><span class="p">.</span><span class="n">ScreenState</span><span class="p">==</span> <span class="n">ScreenState</span><span class="p">.</span><span class="n">Hidden</span><span class="p">)</span>
+      <span class="k">continue</span><span class="p">;</span>
+    <span class="n">screen</span><span class="p">.</span><span class="nf">Draw</span><span class="p">(</span><span class="n">gameTime</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>The BeginDraw method calls a bunch of other methods to setup the Viewports. Here is the code</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">protected</span> <span class="k">void</span> <span class="nf">FullViewport</span> <span class="p">()</span>
+<span class="p">{</span> 
+    <span class="n">Viewport</span> <span class="n">vp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Viewport</span> <span class="p">();</span> 
+    <span class="n">vp</span><span class="p">.</span><span class="n">X</span> <span class="p">=</span> <span class="n">vp</span><span class="p">.</span><span class="n">Y</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> 
+    <span class="n">vp</span><span class="p">.</span><span class="n">Width</span> <span class="p">=</span> <span class="n">DeviceManager</span><span class="p">.</span><span class="n">PreferredBackBufferWidth</span><span class="p">;</span>
+    <span class="n">vp</span><span class="p">.</span><span class="n">Height</span> <span class="p">=</span> <span class="n">DeviceManager</span><span class="p">.</span><span class="n">PreferredBackBufferHeight</span><span class="p">;</span>
+    <span class="n">GraphicsDevice</span><span class="p">.</span><span class="n">Viewport</span> <span class="p">=</span> <span class="n">vp</span><span class="p">;</span>   
+<span class="p">}</span>
+
+<span class="k">protected</span> <span class="kt">float</span> <span class="nf">GetVirtualAspectRatio</span> <span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">virtualWidth</span> <span class="p">/</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">virtualHeight</span><span class="p">;</span>   
+<span class="p">}</span>
+
+<span class="k">protected</span> <span class="k">void</span> <span class="nf">ResetViewport</span> <span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">float</span> <span class="n">targetAspectRatio</span> <span class="p">=</span> <span class="nf">GetVirtualAspectRatio</span> <span class="p">();</span>   
+    <span class="c1">// figure out the largest area that fits in this resolution at the desired aspect ratio     </span>
+    <span class="kt">int</span> <span class="n">width</span> <span class="p">=</span> <span class="n">DeviceManager</span><span class="p">.</span><span class="n">PreferredBackBufferWidth</span><span class="p">;</span>   
+    <span class="kt">int</span> <span class="n">height</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">width</span> <span class="p">/</span> <span class="n">targetAspectRatio</span> <span class="p">+</span> <span class="p">.</span><span class="m">5f</span><span class="p">);</span>   
+    <span class="kt">bool</span> <span class="n">changed</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>     
+    <span class="k">if</span> <span class="p">(</span><span class="n">height</span> <span class="p">&gt;</span> <span class="n">DeviceManager</span><span class="p">.</span><span class="n">PreferredBackBufferHeight</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="n">height</span> <span class="p">=</span> <span class="n">DeviceManager</span><span class="p">.</span><span class="n">PreferredBackBufferHeight</span><span class="p">;</span>   
+        <span class="c1">// PillarBox </span>
+        <span class="n">width</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">height</span> <span class="p">*</span> <span class="n">targetAspectRatio</span> <span class="p">+</span> <span class="p">.</span><span class="m">5f</span><span class="p">);</span>
+        <span class="n">changed</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>   
+    <span class="p">}</span>     
+    <span class="c1">// set up the new viewport centered in the backbuffer </span>
+    <span class="n">Viewport</span> <span class="n">viewport</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Viewport</span> <span class="p">();</span>   
+    <span class="n">viewport</span><span class="p">.</span><span class="n">X</span> <span class="p">=</span> <span class="p">(</span><span class="n">DeviceManager</span><span class="p">.</span><span class="n">PreferredBackBufferWidth</span> <span class="p">/</span> <span class="m">2</span><span class="p">)</span> <span class="p">-</span> <span class="p">(</span><span class="n">width</span> <span class="p">/</span> <span class="m">2</span><span class="p">);</span> 
+    <span class="n">viewport</span><span class="p">.</span><span class="n">Y</span> <span class="p">=</span> <span class="p">(</span><span class="n">DeviceManager</span><span class="p">.</span><span class="n">PreferredBackBufferHeight</span> <span class="p">/</span> <span class="m">2</span><span class="p">)</span> <span class="p">-</span> <span class="p">(</span><span class="n">height</span> <span class="p">/</span> <span class="m">2</span><span class="p">);</span> 
+    <span class="n">viewport</span><span class="p">.</span><span class="n">Width</span> <span class="p">=</span> <span class="n">width</span><span class="p">;</span> 
+    <span class="n">viewport</span><span class="p">.</span><span class="n">Height</span> <span class="p">=</span> <span class="n">height</span><span class="p">;</span> 
+    <span class="n">viewport</span><span class="p">.</span><span class="n">MinDepth</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> 
+    <span class="n">viewport</span><span class="p">.</span><span class="n">MaxDepth</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>         
+    <span class="k">if</span> <span class="p">(</span><span class="n">changed</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">updateMatrix</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>   
+    <span class="n">DeviceManager</span><span class="p">.</span><span class="n">GraphicsDevice</span><span class="p">.</span><span class="n">Viewport</span> <span class="p">=</span> <span class="n">viewport</span><span class="p">;</span>   
+<span class="p">}</span>
+
+<span class="k">protected</span> <span class="k">void</span> <span class="nf">BeginDraw</span> <span class="p">()</span>
+<span class="p">{</span>   
+    <span class="c1">// Start by reseting viewport </span>
+    <span class="nf">FullViewport</span> <span class="p">();</span>   
+    <span class="c1">// Clear to Black </span>
+    <span class="n">GraphicsDevice</span><span class="p">.</span><span class="nf">Clear</span> <span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">Black</span><span class="p">);</span>   
+    <span class="c1">// Calculate Proper Viewport according to Aspect Ratio </span>
+    <span class="nf">ResetViewport</span> <span class="p">();</span>   
+    <span class="c1">// and clear that    </span>
+    <span class="c1">// This way we are gonna have black bars if aspect ratio requires it and     </span>
+    <span class="c1">// the clear color on the rest </span>
+    <span class="n">GraphicsDevice</span><span class="p">.</span><span class="nf">Clear</span> <span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">Black</span><span class="p">);</span>   
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>So first thing we do is reset the Full viewport to the size of the PrefferedBackBufferWidth/Height and then Clear it. Then we reset the viewport to take into account the aspect ratio of the virtual viewport and calculate the virtical/horizontal offsets to center the new viewport and then Clear that just to be sure.That is all the code changes for the ScreenManager. To use it all we need to do is add the extra parameters when we create the new ScreenManager like so</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">screenManager</span><span class="p">=</span><span class="k">new</span> <span class="nf">ScreenManager</span> <span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="m">800</span><span class="p">,</span> <span class="m">480</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<p>You will need to pass in the resolution your game was designed for, in this case 800×480.Then in all the places where we call SpriteBatch.Begin() we need to pass in the screenManager.Scale matrix like so</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">spriteBatch</span><span class="p">.</span><span class="nf">Begin</span><span class="p">(</span><span class="n">SpriteSortMode</span><span class="p">.</span><span class="n">Immediate</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="n">ScreenManager</span><span class="p">.</span><span class="n">Scale</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<p>Note that the SpriteBatch has a number of overloaded Begin methods, you will need to adapt your code if you use things like SamplesState, BlendState, etc. Each of the Game screens should already have a reference to the ScreenManager if you follow the sample code from Microsoft. Also if you make use of GraphicsDevice.Viewport in your game to place objects based on screen size (like ui elements) that will need to be changed to use the ScreenManager.Viewport instead so they are placed within the virtual Viewport. So in the MenuScreen the following call would change from</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">position</span><span class="p">.</span><span class="n">X</span><span class="p">=</span> <span class="n">GraphicsDevice</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="n">Width</span><span class="p">/</span><span class="m">2</span><span class="p">-</span> <span class="n">menuEntry</span><span class="p">.</span><span class="nf">GetWidth</span><span class="p">(</span><span class="k">this</span><span class="p">)/</span><span class="m">2</span><span class="p">;</span> 
+
+</code></pre></div></div>
+
+<p>to this</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">position</span><span class="p">.</span><span class="n">X</span><span class="p">=</span> <span class="n">ScreenManager</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="n">Width</span><span class="p">/</span><span class="m">2</span><span class="p">-</span> <span class="n">menuEntry</span><span class="p">.</span><span class="nf">GetWidth</span><span class="p">(</span><span class="k">this</span><span class="p">)/</span><span class="m">2</span><span class="p">;</span>
+
+</code></pre></div></div>
+
+<p>This should be all you need. In the next post we will look at the changes we need to make to the InputState.cs class to get the mouse and gesture inputs scaled as well.You can download a copy of the modified ScreenManager class <a href="http://www.infinitespace-studios.co.uk/code/ScreenManager.cs">http://www.infinitespace-studios.co.uk/code/ScreenManager.cs</a>.</p>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; 2009-2026 Infinitespace Studios. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://github.com/dellis1972" aria-label="GitHub">GitHub</a>
+          <a href="https://mastodon.gamedev.place/@infspacestudios" aria-label="Mastodon">Mastodon</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

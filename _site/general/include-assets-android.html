@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Include Assets in .net Android | Infinitespace Studios</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Include Assets in .net Android" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Include Assets in .net Android" />
+<meta property="og:description" content="Include Assets in .net Android" />
+<link rel="canonical" href="http://localhost:4000/general/include-assets-android" />
+<meta property="og:url" content="http://localhost:4000/general/include-assets-android" />
+<meta property="og:site_name" content="Infinitespace Studios" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-10T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Include Assets in .net Android" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-10-10T00:00:00+01:00","datePublished":"2023-10-10T00:00:00+01:00","description":"Include Assets in .net Android","headline":"Include Assets in .net Android","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/general/include-assets-android"},"url":"http://localhost:4000/general/include-assets-android"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom head content - add custom meta tags, analytics, etc. here -->
+
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-content">
+        <a href="/" class="logo-link">
+          <img src="/images/issheader.png" alt="Infinitespace Studios" class="site-logo">
+          <span class="site-title">Infinitespace Studios</span>
+        </a>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/">Blog</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/monogame-ports">Ports</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-content">
+      <div class="container">
+        <h1 id="include-assets-in-net-android">Include Assets in .net Android</h1>
+
+<p>By default .net Android apps will auto include assets from the <code class="language-plaintext highlighter-rouge">Assets</code> folder
+in your project directory. However there are times when you want to include assets
+from a directory outside of your project.</p>
+
+<p>For a normal .net application you would do the following</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ItemGroup&gt;</span>
+    <span class="nt">&lt;Content</span> <span class="na">Include=</span><span class="s">"../Resources/**/*"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;CopyToOutputDirectory&gt;</span>Always<span class="nt">&lt;/CopyToOutputDirectory&gt;</span>
+    <span class="nt">&lt;/Content&gt;</span>
+<span class="nt">&lt;/ItemGroup&gt;</span>
+</code></pre></div></div>
+
+<p>This will not work for .net Android. Assets need to be in a folder called <code class="language-plaintext highlighter-rouge">assets</code>.
+So we need to provide a <code class="language-plaintext highlighter-rouge">Link</code> element which describes the final path inside the apk.
+So instead of the above we can use the following.</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ItemGroup&gt;</span>
+    <span class="nt">&lt;AndroidAsset</span> <span class="na">Include=</span><span class="s">"../Resources/**/*"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;Link&gt;</span>Assets/%(RecursiveDir)%(FileName)%(Extension)<span class="nt">&lt;/Link&gt;</span>
+    <span class="nt">&lt;/AndroidAsset&gt;</span>
+<span class="nt">&lt;/ItemGroup&gt;</span>
+</code></pre></div></div>
+
+<p>This will pick up the files in the <code class="language-plaintext highlighter-rouge">Resources</code> folder and place them in the <code class="language-plaintext highlighter-rouge">assets</code>
+folder in the final apk.</p>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; 2009-2026 Infinitespace Studios. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://github.com/dellis1972" aria-label="GitHub">GitHub</a>
+          <a href="https://mastodon.gamedev.place/@infspacestudios" aria-label="Mastodon">Mastodon</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>MonoGame - Scaling your Game using RenderTargets and TouchPanel | Infinitespace Studios</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="MonoGame - Scaling your Game using RenderTargets and TouchPanel" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="So in one of my previous blog posts we covered how to scale your game for multiple screen resolutions using the matrix parameter in the SpriteBatch. Like all good problems that was just one solution or many, and since then things have moved on a bit. While that technique is still valid, the bits we did about scaling the Touch Points are no longer really necessary. In this post we’ll discover how to use the MonoGame Touch panel to get scaled inputs for touch and mouse as well as how to use RenderTargets to scale your game." />
+<meta property="og:description" content="So in one of my previous blog posts we covered how to scale your game for multiple screen resolutions using the matrix parameter in the SpriteBatch. Like all good problems that was just one solution or many, and since then things have moved on a bit. While that technique is still valid, the bits we did about scaling the Touch Points are no longer really necessary. In this post we’ll discover how to use the MonoGame Touch panel to get scaled inputs for touch and mouse as well as how to use RenderTargets to scale your game." />
+<link rel="canonical" href="http://localhost:4000/general/monogame-scaling-your-game-using-rendertargets-and-touchpanel/" />
+<meta property="og:url" content="http://localhost:4000/general/monogame-scaling-your-game-using-rendertargets-and-touchpanel/" />
+<meta property="og:site_name" content="Infinitespace Studios" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-06-22T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="MonoGame - Scaling your Game using RenderTargets and TouchPanel" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2015-06-22T00:00:00+01:00","datePublished":"2015-06-22T00:00:00+01:00","description":"So in one of my previous blog posts we covered how to scale your game for multiple screen resolutions using the matrix parameter in the SpriteBatch. Like all good problems that was just one solution or many, and since then things have moved on a bit. While that technique is still valid, the bits we did about scaling the Touch Points are no longer really necessary. In this post we’ll discover how to use the MonoGame Touch panel to get scaled inputs for touch and mouse as well as how to use RenderTargets to scale your game.","headline":"MonoGame - Scaling your Game using RenderTargets and TouchPanel","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/general/monogame-scaling-your-game-using-rendertargets-and-touchpanel/"},"url":"http://localhost:4000/general/monogame-scaling-your-game-using-rendertargets-and-touchpanel/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom head content - add custom meta tags, analytics, etc. here -->
+
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-content">
+        <a href="/" class="logo-link">
+          <img src="/images/issheader.png" alt="Infinitespace Studios" class="site-logo">
+          <span class="site-title">Infinitespace Studios</span>
+        </a>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/">Blog</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/monogame-ports">Ports</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-content">
+      <div class="container">
+        <p>So in one of my previous blog posts we covered how to scale your game for multiple screen resolutions using the matrix parameter in the SpriteBatch. Like all good problems that was just one solution or many, and since then things have moved on a bit. While that technique is still valid, the bits we did about scaling the Touch Points are no longer really necessary. In this post we’ll discover how to use the MonoGame Touch panel to get scaled inputs for touch and mouse as well as how to use RenderTargets to scale your game.</p>
+
+<h3 id="what-is-a-render-target"><strong>What is a Render Target?</strong></h3>
+
+<p>Ok so your new to gaming and you have no idea what this “RenderTarget” thing is. So at its simplest a <a href="https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.graphics.rendertarget2d.aspx">RenderTarget</a> is just a texture, its on the GPU and you can use it just like a texture. The main difference is you can tell the rendering system to draw directly to the RenderTarget, so instead of your graphics being drawn to the screen its drawn to the RenderTarget. Which you can then use as a texture for something else, like a SpriteBatch. Pretty cool eh :)</p>
+
+<h3 id="scaling-your-game">Scaling your game</h3>
+
+<p>While RenderTargets are really useful for things like Differed Lighting and other shader based things, in our case we just want to use it to render our game. Supporting lots of different screen sizes is a pain, especially when doing 2D stuff, if you are supporting both Mobile and Desktop/Console you will need to support screen resolutions from 320x200 (low end android) to 1080p (HD TV) or bigger.. That is a huge range of screen sizes to make your game look good on. Quite a challenge.</p>
+
+<p>So in our case rather than scaling all the graphics we are going to render our entire scene to a RenderTarget at a fixed resolution in this example 1366x768. Having a fixed resolution means we know EXACTLY how big our “game screen” will be, so we can make sure we have nice margins and make the graphics look great at that resolution. Once we have our scene rendered to the Render Target we can then scale that to it fits the device screen size. We’ll introduce letter boxing support so we can keep the correct aspect ratio like we did in the previous blogs.</p>
+
+<p>So lets look at some code.</p>
+
+<p>Creating a Render Target in MonoGame is really easy, we add the following code to the Initialise method of our game</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scene</span> <span class="p">=</span><span class="err"> </span><span class="k">new</span> <span class="nf">RenderTarget2D</span><span class="p">(</span><span class="n">graphics</span><span class="p">.</span><span class="n">GraphicsDevice</span><span class="p">,</span> <span class="m">1366</span><span class="p">,</span> <span class="m">768</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span><span class="err"> </span><span class="n">SurfaceFormat</span><span class="p">.</span><span class="n">Color</span><span class="p">,</span> <span class="n">DepthFormat</span><span class="p">.</span><span class="n">None</span><span class="p">,</span> <span class="n">pp</span><span class="p">.</span><span class="n">MultiSampleCount</span><span class="p">,</span> <span class="n">RenderTargetUsage</span><span class="p">.</span><span class="n">DiscardContents</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Next step is to actually use the Render Target. We do this in the Draw method</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">GraphicsDevice</span><span class="p">.</span><span class="nf">SetRenderTarget</span><span class="p">(</span><span class="n">scene</span><span class="p">);</span>
+<span class="c1">// draw your game</span>
+<span class="n">GraphicsDevice</span><span class="p">.</span><span class="nf">SetRenderTarget</span> <span class="p">(</span><span class="k">null</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>As you can see we tell the GraphicsDevice to use our RenderTarget, we draw the game, then tell the GraphicsDevice to not use any RenderTarget. We can how just use a SpriteBatch as normal to draw the RenderTarget to the screen. The following code will just draw the RenderTarget in the top left of the screen without scaling</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">spriteBatch</span><span class="p">.</span><span class="nf">Being</span><span class="p">();</span>
+<span class="n">spriteBatch</span><span class="p">.</span><span class="nf">Draw</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="n">Vector2</span><span class="p">.</span><span class="n">Zero</span><span class="p">);</span>
+<span class="n">spriteBtach</span><span class="p">.</span><span class="nf">End</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>However what we really need to do before we draw the RenderTarget is calculate a destination rectangle which will “scale” the RenderTarget so it fits within the confines of the screen, but also maintain its aspect ratio. This last bit is important because if you don’t maintain the aspect ratio your graphics will distort.</p>
+
+<p>So first this we need to do is calculate the aspect ratio of the RenderTarget and the Screen</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">outputAspect</span> <span class="p">=</span> <span class="n">Window</span><span class="p">.</span><span class="n">ClientBounds</span><span class="p">.</span><span class="n">Width</span> <span class="p">/</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">Window</span><span class="p">.</span><span class="n">ClientBounds</span><span class="p">.</span><span class="n">Height</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">preferredAspect</span> <span class="p">=</span> <span class="m">1366</span><span class="err"> </span><span class="p">/</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="m">768</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Next we need to decide if we calculate the destination rectangle, but we need to add a “letter boxing” effect. these are black bars at the top and bottom of the screen (or to the left and right) which fill in the missing area so that we maintain aspect ration. Its a bit like watching a Wide Screen movie on an old TV, you get the black bars at the top and bottom. The code to do this is as follows</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Rectangle</span> <span class="n">dst</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">outputAspect</span> <span class="p">&lt;=</span> <span class="n">preferredAspect</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="err"> </span> <span class="c1">// output is taller than it is wider, bars on top/bottom</span>
+<span class="err"> </span> <span class="kt">int</span> <span class="n">presentHeight</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="n">Window</span><span class="p">.</span><span class="n">ClientBounds</span><span class="p">.</span><span class="n">Width</span> <span class="p">/</span> <span class="n">preferredAspect</span><span class="p">)</span> <span class="p">+</span> <span class="m">0.5f</span><span class="p">);</span>
+<span class="err"> </span> <span class="kt">int</span> <span class="n">barHeight</span> <span class="p">=</span> <span class="p">(</span><span class="n">Window</span><span class="p">.</span><span class="n">ClientBounds</span><span class="p">.</span><span class="n">Height</span> <span class="p">-</span> <span class="n">presentHeight</span><span class="p">)</span> <span class="p">/</span> <span class="m">2</span><span class="p">;</span>
+<span class="err"> </span> <span class="n">dst</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Rectangle</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">barHeight</span><span class="p">,</span> <span class="n">Window</span><span class="p">.</span><span class="n">ClientBounds</span><span class="p">.</span><span class="n">Width</span><span class="p">,</span> <span class="n">presentHeight</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">else</span>
+<span class="p">{</span>
+<span class="err"> </span> <span class="c1">// output is wider than it is tall, bars left/right</span>
+<span class="err"> </span> <span class="kt">int</span> <span class="n">presentWidth</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="n">Window</span><span class="p">.</span><span class="n">ClientBounds</span><span class="p">.</span><span class="n">Height</span> <span class="p">*</span> <span class="n">preferredAspect</span><span class="p">)</span> <span class="p">+</span> <span class="m">0.5f</span><span class="p">);</span>
+<span class="err"> </span> <span class="kt">int</span> <span class="n">barWidth</span> <span class="p">=</span> <span class="p">(</span><span class="n">Window</span><span class="p">.</span><span class="n">ClientBounds</span><span class="p">.</span><span class="n">Width</span> <span class="p">-</span> <span class="n">presentWidth</span><span class="p">)</span> <span class="p">/</span> <span class="m">2</span><span class="p">;</span>
+<span class="err"> </span> <span class="n">dst</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Rectangle</span><span class="p">(</span><span class="n">barWidth</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">presentWidth</span><span class="p">,</span> <span class="n">Window</span><span class="p">.</span><span class="n">ClientBounds</span><span class="p">.</span><span class="n">Height</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>You can see from the code we calculate how much to offset the rectangle from the top and bottom/left and right of the screen to give the letterbox effect. This value is stored in barHeight/barWidth then used as the Top or Left values for the rectangle. The presentWidth/Height is the height of the destination rectangle. The width/height of the rect will match the ClientBounds depending on whether we are letter boxing at the top/bottom or left/right.</p>
+
+<p>So with the destination rectangle calculated we can now use the following to draw the RenderTarget</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">graphics</span><span class="p">.</span><span class="n">GraphicsDevice</span><span class="p">.</span><span class="nf">Clear</span><span class="p">(</span><span class="n">ClearOptions</span><span class="p">.</span><span class="n">Target</span><span class="p">,</span> <span class="n">Color</span><span class="p">.</span><span class="n">Black</span><span class="p">,</span> <span class="m">1.0f</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+<span class="n">spriteBatch</span><span class="p">.</span><span class="nf">Begin</span><span class="p">(</span><span class="n">SpriteSortMode</span><span class="p">.</span><span class="n">Immediate</span><span class="p">,</span> <span class="n">BlendState</span><span class="p">.</span><span class="n">Opaque</span><span class="p">);</span>
+<span class="n">spriteBatch</span><span class="p">.</span><span class="nf">Draw</span><span class="p">(</span><span class="n">renderTarget</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">);</span>
+<span class="n">spriteBatch</span><span class="p">.</span><span class="nf">End</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>Note we clear the background black before drawing to get the nice black borders. You can change that colour to anything you like really.</p>
+
+<h3 id="what-about-scaling-the-input">What about scaling the Input?</h3>
+
+<p>By using a fixed size render target we will need to do something about the Touch input. Its no good on a 320x200 screen getting a touch location of 320x200 and passing that into our game world which we think it 1366x760 as it won’t be in the right place. Fortunately MonoGame has an excellent solution</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TouchPanel</span><span class="p">.</span><span class="n">DisplayWidth</span> <span class="p">=</span> <span class="m">1366</span><span class="p">;</span>
+<span class="n">TouchPanel</span><span class="p">.</span><span class="n">DispalyHeight</span> <span class="p">=</span> <span class="m">768</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>By setting the DisplayWidth/Height on the TouchPanel it will AUTOMATICALLY scale the input for you.. That is just awesome! But wait for it .. it gets even better. You can also easily turn the Mouse input into Touch input which is handy if you’re  only interested in left click events.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TouchPanel</span><span class="p">.</span><span class="n">EnableMouseTouchPoint</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Now any mouse click on the screen will result in the Touch event. This is great if you want to debug/test with a Desktop app rather than messing about with mobile devices.</p>
+
+<h3 id="things-to-consider">Things to Consider</h3>
+
+<p>This is all great but to be honest scaling a 1366x768 texture down for 320x200 will look awful! So you need to be a bit smarter about the RenderTarget size you pick. One solution might be to detect the screen size and scale down the render target but factors of 2 (for example) and use smaller textures. For example at full resolution 1366x768 you use hight res textures (e.g @2x on iOS) but on lower resolution devices you use a RenderTarget of half the size of your normal one and normal sized textures. Obviously you will need to scale your games physics (maybe) and other aspects to take into account the smaller area you have to deal with.. or make use of a 2d matrix camera.</p>
+
+<p>The point being that smaller devices don’t always have the same capabilities are larger ones so you need to keep that in mind.</p>
+
+<p>A full “Game1.cs” class with this code is available on gist <a href="https://gist.github.com/dellis1972/feaf0d313c6fe05cae34">here</a>.</p>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; 2009-2026 Infinitespace Studios. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://github.com/dellis1972" aria-label="GitHub">GitHub</a>
+          <a href="https://mastodon.gamedev.place/@infspacestudios" aria-label="Mastodon">Mastodon</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

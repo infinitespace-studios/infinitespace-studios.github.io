@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>MonoGame - Building .fx Shaders on a Mac (and Linux) | Infinitespace Studios</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="MonoGame - Building .fx Shaders on a Mac (and Linux)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="One of the issues MonoGame Mac (and Linux) developers face is not being able to build shaders. Getting a good shader HLSL compiler to work on a non Windows platform is tricky. Work is under way to get this done but it will take some time to get right." />
+<meta property="og:description" content="One of the issues MonoGame Mac (and Linux) developers face is not being able to build shaders. Getting a good shader HLSL compiler to work on a non Windows platform is tricky. Work is under way to get this done but it will take some time to get right." />
+<link rel="canonical" href="http://localhost:4000/general/monogame-building-fx-shaders-on-a-mac-and-linux/" />
+<meta property="og:url" content="http://localhost:4000/general/monogame-building-fx-shaders-on-a-mac-and-linux/" />
+<meta property="og:site_name" content="Infinitespace Studios" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-02-25T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="MonoGame - Building .fx Shaders on a Mac (and Linux)" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2016-02-25T00:00:00+00:00","datePublished":"2016-02-25T00:00:00+00:00","description":"One of the issues MonoGame Mac (and Linux) developers face is not being able to build shaders. Getting a good shader HLSL compiler to work on a non Windows platform is tricky. Work is under way to get this done but it will take some time to get right.","headline":"MonoGame - Building .fx Shaders on a Mac (and Linux)","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/general/monogame-building-fx-shaders-on-a-mac-and-linux/"},"url":"http://localhost:4000/general/monogame-building-fx-shaders-on-a-mac-and-linux/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom head content - add custom meta tags, analytics, etc. here -->
+
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-content">
+        <a href="/" class="logo-link">
+          <img src="/images/issheader.png" alt="Infinitespace Studios" class="site-logo">
+          <span class="site-title">Infinitespace Studios</span>
+        </a>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/">Blog</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/monogame-ports">Ports</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-content">
+      <div class="container">
+        <p>One of the issues MonoGame Mac (and Linux) developers face is not being able to build shaders. Getting a good shader HLSL compiler to work on a non Windows platform is tricky. Work is under way to get this done but it will take some time to get right.</p>
+
+<p>That leaves Mac (and Linux) developers a bit stuck. Well there is a solution, a custom Content Pipeline processor. This is where the Content Pipeline can show its pure awesomeness.</p>
+
+<h3 id="the-problem">The Problem</h3>
+
+<p>Lets break it down, we have a shader we can to build. But we MUST build it on a Windows box. One way is to do it manually, but doing stuff manually is dull. Rather than opening a Virtual Machine and copying compiled .xnb files about, I wrote a pipeline extension. Its goal to take the shader code, send it to the Windows box. Compile it and send the result back to be packaged into an .xnb.</p>
+
+<h3 id="the-solution">The Solution</h3>
+
+<p>MonoGame has a tool called 2MGFX. This is the underlying tool which takes HLSL .fx files and compiles them to HLSL or GLSL. So what I did was create a service which just shells out to the tool and gets the compiled code (or errors). We then return the results and use the existing packaging process to produce the .xnb file or throw an error. Then I went one further. Hosted the server in <a href="https://pipeline.infinitespace-studios.co.uk">Azure</a>, which saves me having to boot my VM each time I want to compile a shader.</p>
+
+<p>The resulting processor code for this is quite simple. The new class is derived from EffectProcessor. You will see that if we are running the processor on Windows we just fall back to the default EffectProcessor code. Which means you can use the same Processor on Mac and Windows.</p>
+
+<p>One restriction at this time is that the .fx file needs to be self contained. In other words you cannot use include’s or have code in external files. One this I could do is plug in the MonoGame Effect pre-processor to pull all of those includes into one file. But that is a job for the future (or a PR :) )</p>
+
+<p>If you want to take a look at all the code you can find it <a href="https://github.com/infinitespace-studios/InfinitespaceStudios.Pipeline">here</a>.</p>
+
+<h3 id="the-code">The Code</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">override</span> <span class="n">CompiledEffectContent</span> <span class="nf">Process</span> <span class="p">(</span><span class="n">EffectContent</span> <span class="n">input</span><span class="p">,</span> <span class="n">ContentProcessorContext</span> <span class="n">context</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Environment</span><span class="p">.</span><span class="n">OSVersion</span><span class="p">.</span><span class="n">Platform</span> <span class="p">!=</span> <span class="n">PlatformID</span><span class="p">.</span><span class="n">Unix</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">base</span><span class="p">.</span><span class="nf">Process</span> <span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">context</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">var</span> <span class="n">code</span> <span class="p">=</span> <span class="n">input</span><span class="p">.</span><span class="n">EffectCode</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">platform</span> <span class="p">=</span> <span class="n">context</span><span class="p">.</span><span class="n">TargetPlatform</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span> <span class="p">();</span>
+    <span class="n">client</span><span class="p">.</span><span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span> <span class="p">(</span><span class="s">"{0}://{1}:{2}/"</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">RemoteAddress</span><span class="p">,</span> <span class="n">RemotePort</span><span class="p">));</span>
+    <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">PostAsync</span> <span class="p">(</span><span class="s">"api/Effect"</span><span class="p">,</span> <span class="k">new</span> <span class="nf">StringContent</span> <span class="p">(</span><span class="nf">JsonSerializer</span> <span class="p">(</span><span class="k">new</span> <span class="nf">Data</span>  <span class="p">()</span> <span class="p">{</span>
+        <span class="n">Platform</span> <span class="p">=</span> <span class="n">platform</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span>
+        <span class="n">Code</span> <span class="p">=</span> <span class="n">code</span>
+    <span class="p">}),</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">,</span> <span class="s">"application/json"</span><span class="p">)).</span><span class="n">Result</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">IsSuccessStatusCode</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">data</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span> <span class="p">().</span><span class="n">Result</span><span class="p">;</span>
+        <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="nf">JsonDeSerializer</span> <span class="p">(</span><span class="n">data</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">Error</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">Exception</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">Error</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">Compiled</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">result</span><span class="p">.</span><span class="n">Compiled</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">Exception</span> <span class="p">(</span><span class="s">"There was an error compiling the effect"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">CompiledEffectContent</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">Compiled</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">Exception</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span><span class="p">.</span><span class="nf">ToString</span> <span class="p">());</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Pretty simple code isn’t it! At some point I’ll see if we can replace the <strong><em>.Result</em></strong> code with <strong><em>async/await</em></strong>. But I’m not entirely sure how the Pipeline will respond to that.</p>
+
+<h3 id="using-infinitespacestudiospipeline">Using InfinitespaceStudios.Pipeline</h3>
+
+<p>Using this extension could not be easier.</p>
+
+<p>If you want to use the <em>default</em> service</p>
+
+<ol>
+  <li>Open your project and find the Packages Folder. Right click and select Add Packages. <a href="https://github.com/infinitespace-studios/InfinitespaceStudios.Pipeline/wiki/images/AddPackage.png"><img src="images/AddPackage.png" alt="" /></a></li>
+  <li>This will open the Nuget search Dialog. Search for “InfinitespaceStudios.Pipeline” and add the Package.<a href="https://github.com/infinitespace-studios/InfinitespaceStudios.Pipeline/wiki/images/Add.png"><img src="images/Add.png" alt="" /></a></li>
+  <li>Once the package has been added. Open the Content.mgcb file in the Pipeline Editor.<a href="https://github.com/infinitespace-studios/InfinitespaceStudios.Pipeline/wiki/images/OpenContent.png"><img src="images/OpenContent.png" alt="" /></a></li>
+  <li>Select the “Content” node and then find the References property in the property grid. Double click the References property to bring up the Add References Dialog.<a href="https://github.com/infinitespace-studios/InfinitespaceStudios.Pipeline/wiki/images/AddPipeline.png"><img src="images/AddPipeline.png" alt="" /></a></li>
+  <li>Search for the “InfinitespaceStudios.Pipeline.dll” and Add it by clicking on the “Add” button. Note this should be located in the “packages\InfinitespaceStudios.Pipeline.X.X.X\Tools” folder. Once that is done, Save the Content.mgcb. Close it an re open it (there is a bug in the Pipeline Tool). The select the .fx file you want to change. <a href="https://github.com/infinitespace-studios/InfinitespaceStudios.Pipeline/wiki/images/ChangeProcessor.png"><img src="images/ChangeProcessor.png" alt="" /></a></li>
+  <li>Select the Processor property and in the drop down you should see “Remote Effect Processor - Infinitespace Studios”. Select this Item.<a href="https://github.com/infinitespace-studios/InfinitespaceStudios.Pipeline/wiki/images/RemoteEffect.png"><img src="images/RemoteEffect.png" alt="" /></a></li>
+  <li>If you are using the defaults just Save the Content.mcgb. Close the Pipeline tool and Build and Run you app. It should compile without any issues. If there is a problem with the .fx file the error will be reported in the build log. <a href="https://github.com/infinitespace-studios/InfinitespaceStudios.Pipeline/wiki/images/BuildAndRun.png"><img src="images/BuildAndRun.png" alt="" /></a></li>
+</ol>
+
+<p>If you are using a Custom Azure site or the Local Service on a Windows box you can use the <em>RemoteAddress</em> , <em>RemotePort</em> and <em>Protocol</em> properties to change the location of the server. Valid <em>Protocol</em> values are “http” and “https” if you have a secured service. The <em>RemoteAddress</em> can be a CNAME or IP address.</p>
+
+<p> </p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Hopefully this post has shown you what a cool thing the Pipeline system is. One of my future posts will be about creating a pipeline extension from scratch. So if you are interested watch out for it. In the mean time, if you are a mac user. Get compiling those shaders!</p>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; 2009-2026 Infinitespace Studios. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://github.com/dellis1972" aria-label="GitHub">GitHub</a>
+          <a href="https://mastodon.gamedev.place/@infspacestudios" aria-label="Mastodon">Mastodon</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
