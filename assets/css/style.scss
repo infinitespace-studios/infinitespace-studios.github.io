@@ -272,15 +272,15 @@ article, .page-content {
     background-color: $color-bg-card;
     border: 1px solid $color-border;
     border-radius: 8px;
-    padding: 1rem;
+    padding: 1.5rem;
     overflow-x: auto;
-    margin: 1.5rem 0;
+    margin: 2rem 0;
 
     code {
       background: none;
       padding: 0;
       font-size: 0.875rem;
-      line-height: 1.5;
+      line-height: 1.6;
     }
   }
 
@@ -304,6 +304,45 @@ article, .page-content {
       background-color: $color-bg-hover;
     }
   }
+}
+
+// Code blocks (global - for .main-content pages)
+.highlighter-rouge {
+  margin: 2rem 0;
+  
+  .highlight {
+    background-color: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: 8px;
+    
+    pre.highlight {
+      margin: 0;
+      padding: 1.5rem;
+      background: transparent;
+      border: none;
+      
+      code {
+        font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        font-size: 0.875rem;
+        line-height: 1.7;
+      }
+    }
+  }
+}
+
+// Rouge syntax highlighting (dark theme)
+.highlight {
+  .c, .c1, .cm { color: #8b949e; font-style: italic; } // Comments
+  .k, .kd, .kn, .kp, .kr, .kt { color: #ff7b72; } // Keywords
+  .n, .na, .nb, .nc, .nd, .ne, .nf, .ni, .nl, .nn, .no, .nt, .nv { color: #e6edf3; } // Names
+  .nc, .nf { color: #d2a8ff; } // Class names, function names
+  .s, .s1, .s2, .sb, .sc, .sd, .se, .sh, .si, .sr, .ss, .sx { color: #a5d6ff; } // Strings
+  .m, .mi, .mf, .mh, .mo { color: #79c0ff; } // Numbers
+  .o, .ow { color: #ff7b72; } // Operators
+  .p { color: #e6edf3; } // Punctuation
+  .cp { color: #ff7b72; } // Preprocessor
+  .gi { color: #3fb950; } // Inserted
+  .gd { color: #f85149; } // Deleted
 }
 
 // About Page
