@@ -3,6 +3,8 @@ plugins:
 
 markdown: kramdown
 
+google_analytics: G-13GTE0C2R4
+
 title: Infinitespace Studios
 description: Mobile and Game Development
 
