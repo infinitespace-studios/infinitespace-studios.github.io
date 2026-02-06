@@ -6,7 +6,7 @@ tag: monogame game
 summary: Got Blury pixels? SpriteBatch SamplerState.PointClamp is your friend.
 ---
 
-This is something that comes up allot for people who are making pixel platformers, or if you are writting a game which needs that pixel perfect look.
+When developing [Co-operoids](https://infinitespace-online.itch.io/co-operoids) I wanted that nice crisp pixels for that old school arcade look. This is something that comes up allot for people who are making pixel platformers, or if you are writing a game which needs that pixel perfect look.
 
 ## What is SamplerState
 
@@ -20,7 +20,7 @@ Sometimes blended textures make things look better.
 
 ## So what are the SamplerStates?
 
-When developing [Co-operoids](https://infinitespace-online.itch.io/co-operoids) I wanted that nice crisp pixels for that old school arcade look. The out of the box experience for `SpriteBatch` will use the `SamplerState.LinearClamp` for texture sampling. For a particular sprite this is how that looks.
+The out of the box experience for `SpriteBatch` will use the `SamplerState.LinearClamp` for texture sampling. For a particular sprite this is how that looks.
 
 ```csharp
 _spriteBatch.Begin();
