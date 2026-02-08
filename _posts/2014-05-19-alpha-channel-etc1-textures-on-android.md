@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Alpha Channel ETC1 Textures on Xamarin.Android"
+lang: en
 date: "2014-05-19"
 permalink: /gamedevelopment/alpha-channel-etc1-textures-on-android
 summary: We go into details on how to support Alpha with ETC1.

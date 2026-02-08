@@ -1,5 +1,14 @@
 plugins:
 - jekyll-seo-tag
+- jekyll-polyglot
+
+languages: ["en"]
+default_lang: "en"
+exclude_from_localization: ["assets/css", "images"]
+parallel_localization: true
+
+sass:
+  sourcemap: never
 
 markdown: kramdown
 

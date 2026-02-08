@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Co-operoids"
+lang: en
 permalink: /general/co-operoids
 tag: monogame game
 summary: Co-operative Asteroids, an modern spin on a classic.

@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "MonoGame - SpriteBatch SamplerState"
+lang: en
 permalink: /general/monogame-spritebatch-sampler-states
 tag: monogame game
 summary: Got Blury pixels? SpriteBatch SamplerState.PointClamp is your friend.

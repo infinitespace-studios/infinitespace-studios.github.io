@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Make game in 4 weeks Challenge - Weeks 1-2"
+lang: en
 date: "2014-01-19"
 summary: My journey in trying to write a game in a month.
 permalink: /general/make-game-in-4-weeks-challenge-weeks-1-2

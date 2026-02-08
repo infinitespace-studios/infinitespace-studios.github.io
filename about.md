@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "About"
+lang: en
 permalink: /about
 ---
 

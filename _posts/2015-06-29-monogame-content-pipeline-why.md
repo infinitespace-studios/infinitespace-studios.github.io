@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "MonoGame - Content Pipeline ... Why???"
+lang: en
 date: "2015-06-29"
 categories: 
   - "content-pipeline"

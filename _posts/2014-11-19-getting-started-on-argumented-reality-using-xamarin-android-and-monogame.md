@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Getting Started on Augmented Reality using Xamarin.Android and MonoGame"
+lang: en
 date: "2014-11-19"
 categories: 
   - "android"

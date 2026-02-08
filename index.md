@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Infinitespace Studios"
+lang: en
 permalink: /index
 ---
 

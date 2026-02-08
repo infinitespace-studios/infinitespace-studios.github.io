@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "MonoGame – Continuous Integration with Travis CI"
+lang: en
 permalink: /general/monogame-continuous-integration-with-travis-ci
 tag: monogame ci
 summary: Want to get MonoGame running on Travis CI. Here's how you do it.

@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "MonoGame - Building .fx Shaders on a Mac (and Linux)"
+lang: en
 date: "2016-02-25"
 categories: 
   - "content-pipeline"

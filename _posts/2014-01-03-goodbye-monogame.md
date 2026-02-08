@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Goodbye MonoGame"
+lang: en
 date: "2014-01-03"
 permalink: /gamedevelopment/goodbye-monogame
 categories: 

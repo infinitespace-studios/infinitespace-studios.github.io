@@ -2,6 +2,7 @@
 layout: default
 permalink: /general/handling-multiple-screen-resolutions-in-monogame-for-android-part-1
 title: "Handling multiple screen resolutions in MonoGame for Android – Part 1"
+lang: en
 date: "2014-05-22"
 summary: "Learn how to modify the ScreenManager class to handle multiple screen resolutions in MonoGame Android games using virtual resolution scaling."
 categories: 

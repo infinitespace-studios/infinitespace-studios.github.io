@@ -1,5 +1,6 @@
 ---
 title: "Games"
+lang: en
 permalink: /games
 layout: default
 ---

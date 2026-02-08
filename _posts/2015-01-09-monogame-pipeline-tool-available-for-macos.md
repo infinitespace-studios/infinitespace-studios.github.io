@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "MonoGame Pipeline Tool available for MacOS"
+lang: en
 date: "2015-01-09"
 permalink: /general/monogame-pipeline-tool-available-for-macos/
 categories: 

@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Indie Game Developers Get Xamarin iOS/Android for Free."
+lang: en
 date: "2015-12-16"
 categories: 
   - "gamedevelopment"

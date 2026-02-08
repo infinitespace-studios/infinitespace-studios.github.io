@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "MonoGame - Scaling your Game using RenderTargets and TouchPanel"
+lang: en
 date: "2015-06-22"
 categories: 
   - "csharp"
