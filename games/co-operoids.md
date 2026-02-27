@@ -11,11 +11,11 @@ A co-op asteroids-style game.
 
 ## Play Now
 
-<div id="game-container" style="width: 100%; max-width: 800px; margin: 0 auto;">
-    <canvas id="canvas" style="width: 100%; border: 1px solid #333;"></canvas>
-</div>
-
-<script type="module" src="/assets/games/co-operoids/main.js"></script>
+<iframe 
+    src="/assets/games/co-operoids/index.html" 
+    style="width: 100%; max-width: 1280px; aspect-ratio: 16/9; border: 1px solid #333; display: block; margin: 0 auto;"
+    allowfullscreen>
+</iframe>
 
 ## Download
 
