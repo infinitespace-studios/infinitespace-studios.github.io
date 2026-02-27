@@ -23,4 +23,6 @@ exclude:
 
 include:
   - images
+
+keep_files:
   - assets/games/co-operoids/_framework
