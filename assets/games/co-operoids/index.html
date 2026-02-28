@@ -65,6 +65,19 @@
           if (text) console.error('[post-exception status] ' + text);
         };
       };
+       window.addEventListener("keydown", function(event)
+        {
+            // Prevent Arrows Keys and Spacebar scrolling the outer page
+            // when running inside an iframe. e.g: itch.io embedding.
+            if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1)
+                event.preventDefault();
+        });
+        window.addEventListener("wheel", function(event)
+        {
+            // Prevent Mousewheel scrolling the outer page
+            // when running inside an iframe. e.g: itch.io embedding.
+            event.preventDefault();
+        }, { passive: false });
     </script>
     <script async type="module" type="text/javascript" src="main.js"></script>
     <script>
