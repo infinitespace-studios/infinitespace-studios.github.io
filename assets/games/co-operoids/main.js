@@ -67,19 +67,19 @@ await new Promise(resolve => {
 });
 
 const drawSplashProgress = (loaded, total, currentFile) => {
-    splashCtx.clearRect(0, 0, 1280, 720);
+    splashCtx.clearRect(0, 0, splashCanvas.width, splashCanvas.height);
     splashCtx.fillStyle = '#000';
-    splashCtx.fillRect(0, 0, 1280, 720);
+    splashCtx.fillRect(0, 0, splashCanvas.width, splashCanvas.height);
 
     // Draw splash image centred with aspect ratio preserved (object-fit: contain)
     if (splashImage.complete && splashImage.naturalWidth > 0) {
         const iw = splashImage.naturalWidth;
         const ih = splashImage.naturalHeight;
-        const scale = Math.min(1280 / iw, 720 / ih);
+        const scale = Math.min(splashCanvas.width / iw, splashCanvas.height / ih);
         const dw = iw * scale;
         const dh = ih * scale;
-        const dx = (1280 - dw) / 2;
-        const dy = (720 - dh) / 2;
+        const dx = (splashCanvas.width - dw) / 2;
+        const dy = (splashCanvas.height - dh) / 2;
         splashCtx.drawImage(splashImage, dx, dy, dw, dh);
     }
 
