@@ -9,6 +9,8 @@ summary: Want a really nice looking Skybox? Equirectangular is your friend.
 
 Want a gorgeous, seamless skybox for your MonoGame project without dealing with six cube-map textures? An equirectangular panorama mapped onto a sphere is the way to go. In this post I'll walk through a complete demo that renders a full-sphere skybox from a single panorama image using a custom HLSL shader. You can grab the full sample project from [GitHub](https://github.com/infinitespace-studios/Blog/tree/main/EquirectangularSkyboxDemo).
 
+![skybox image of the earth](../images/skybox.png)
+
 ## What is a SkyBox?
 
 A skybox is the background that surrounds the player in a 3D game. It gives the illusion of a distant environment — stars, mountains, clouds — without actually modeling any of that geometry. The two most common approaches are:
