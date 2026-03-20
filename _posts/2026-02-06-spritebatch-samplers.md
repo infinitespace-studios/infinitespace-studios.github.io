@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "MonoGame - SpriteBatch SamplerState"
 lang: en
 permalink: /general/monogame-spritebatch-sampler-states

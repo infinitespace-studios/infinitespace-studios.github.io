@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Indie Game Developers Get Xamarin iOS/Android for Free."
 lang: en
 date: "2015-12-16"

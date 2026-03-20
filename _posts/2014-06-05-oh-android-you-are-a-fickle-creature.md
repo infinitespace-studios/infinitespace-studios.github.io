@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Oh Android you are a fickle creature.."
 lang: en
 date: "2014-06-05"

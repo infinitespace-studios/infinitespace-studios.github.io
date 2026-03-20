@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Getting Started on Augmented Reality using Xamarin.Android and MonoGame"
 lang: en
 date: "2014-11-19"

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "MonoGame – Continuous Integration with Travis CI"
 lang: en
 permalink: /general/monogame-continuous-integration-with-travis-ci

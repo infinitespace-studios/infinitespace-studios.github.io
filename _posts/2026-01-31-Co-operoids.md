@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Co-operoids"
 lang: en
 permalink: /general/co-operoids

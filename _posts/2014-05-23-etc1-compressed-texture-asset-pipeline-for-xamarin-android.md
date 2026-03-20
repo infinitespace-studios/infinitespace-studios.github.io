@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "ETC1 Compressed Texture Asset Pipeline for Xamarin.Android"
 lang: en
 date: "2014-05-23"

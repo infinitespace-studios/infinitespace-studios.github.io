@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Make game in 4 weeks Challenge - Weeks 1-2"
 lang: en
 date: "2014-01-19"

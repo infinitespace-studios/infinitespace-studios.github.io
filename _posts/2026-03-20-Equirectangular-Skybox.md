@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "MonoGame - Equirectangular Skybox"
 lang: en
 permalink: /general/monogame-equirectangular-skybox

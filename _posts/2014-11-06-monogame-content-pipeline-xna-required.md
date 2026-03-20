@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "MonoGame Content Pipeline = XNA !Required"
 lang: en
 date: "2014-11-06"

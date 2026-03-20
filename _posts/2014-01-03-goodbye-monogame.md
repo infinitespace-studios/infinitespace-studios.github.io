@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Goodbye MonoGame"
 lang: en
 date: "2014-01-03"

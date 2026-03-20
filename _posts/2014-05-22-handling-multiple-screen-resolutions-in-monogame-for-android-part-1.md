@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 permalink: /general/handling-multiple-screen-resolutions-in-monogame-for-android-part-1
 title: "Handling multiple screen resolutions in MonoGame for Android – Part 1"
 lang: en

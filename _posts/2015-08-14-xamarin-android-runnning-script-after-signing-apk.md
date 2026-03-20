@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Xamarin Android - Running a script after Signing the APK"
 lang: en
 date: "2015-08-14"

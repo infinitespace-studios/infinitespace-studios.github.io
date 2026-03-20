@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Alpha Channel ETC1 Textures on Xamarin.Android"
 lang: en
 date: "2014-05-19"

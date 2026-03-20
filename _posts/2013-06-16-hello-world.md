@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "I am back!"
 lang: en
 permalink: /uncategorized/hello-world

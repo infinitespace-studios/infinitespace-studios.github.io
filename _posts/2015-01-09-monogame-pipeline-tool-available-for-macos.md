@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "MonoGame Pipeline Tool available for MacOS"
 lang: en
 date: "2015-01-09"

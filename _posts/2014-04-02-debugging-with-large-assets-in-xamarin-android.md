@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Debugging with Large Assets in Xamarin Android"
 lang: en
 date: "2014-04-02"

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Handling multiple screen resolutions in MonoGame for Android – Part 2"
 lang: en
 date: "2014-05-23"

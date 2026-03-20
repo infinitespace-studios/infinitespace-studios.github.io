@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "MonoGame - Content Pipeline ... Why???"
 lang: en
 date: "2015-06-29"

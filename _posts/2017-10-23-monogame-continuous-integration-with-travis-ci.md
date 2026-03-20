@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "MonoGame - Continuous Integration with Travis CI."
 lang: en
 date: "2017-10-23"

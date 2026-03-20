@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "MonoGame - Content Pipeline integration"
 lang: en
 date: "2016-01-13"

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "MonoGame - Building .fx Shaders on a Mac (and Linux)"
 lang: en
 date: "2016-02-25"
