@@ -61,6 +61,7 @@ These are all the outputs from the various states
 ![All Sampler States](../images/all.samplerstates.png)
 
 Also note that for the `Wrap` versions, we might also get some pixels from adjacent sprites if you are using a spritesheet.
+Its worth pointing out that the visual difference between Linear and Anisotropic is tiny, but Anisotropic is much more expensive to compute. So unless you absolutely want Anisotropic, stick with Linear.
 
 ## Conclusion
 
